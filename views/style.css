@@ -1,0 +1,8 @@
+video{
+        display: block;
+        margin: 0 auto;
+        height: 500px;
+}
+.card-img-top{
+    background-color: currentColor;
+}

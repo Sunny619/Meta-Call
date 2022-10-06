@@ -1,9 +1,10 @@
 const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 let templates = document.querySelector('#template')
-let viewportHeight = window.innerHeight;
-let viewportWidth = window.innerWidth
-let count = 1;
+var viewportHeight = window.innerHeight;
+let viewportWidth = window.innerWidth;
+var count =0
+window.addEventListener('resize', resize1);
 const myPeer = new Peer({host:'peerjs-server.herokuapp.com', secure:true, port:443})
 const myVideo = document.createElement('video')
 let flag = 0;
@@ -64,6 +65,7 @@ function addVideoStream(video, stream) {
     video.play()
   })
   blitNewUserVideo(video);
+  resize1();
   //videoGrid.append(video)
 }
 
@@ -76,21 +78,37 @@ function blitNewUserVideo(video)
   videoHolder.append(video);
   videoGrid.appendChild(card);
 }
-// window.addEventListener('resize', resize());
-
-// function resize()
-// {
-//   const videos = document.getElementsByTagName("video");
-//   if(videos.length>)
-//   else if(videos.length>4)
-//   {
-
-//   }
-//   else if(videos.length>2)
-//   {
-
-//   }
-//   else if(videos.length==2)
 
 
-// }
+function resize1()
+{
+  console.log("called")
+  viewportHeight = window.innerHeight;
+  viewportWidth = window.innerWidth;
+  let divider = 1;
+  if(count>9)
+  {
+    divider =4
+    videoGrid.className = "grid4";
+  }
+  else if(count>4)
+  {
+    divider =3
+    videoGrid.className = "grid3";
+  }
+  else if(count>1)
+  {
+    divider =2
+    videoGrid.className = "grid2";
+  }
+  else if(count==1)
+  {
+    divider=1
+    videoGrid.className = "grid1";
+  }
+  let listofcards = document.getElementsByTagName('video')
+  for(let i=0;i<listofcards.length;i++)
+  {
+    listofcards[i].style.height = (viewportHeight/divider)-2 + "px";
+  }
+}

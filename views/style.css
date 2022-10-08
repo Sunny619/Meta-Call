@@ -1,8 +1,24 @@
 video{
         display: block;
         margin: 0 auto;
-        height: 500px;
+        height: 100%;
 }
 .card-img-top{
     background-color: currentColor;
+}
+.grid1{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+}
+.grid2{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+}
+.grid3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.grid4{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr ;
 }

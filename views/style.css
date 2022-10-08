@@ -1,10 +1,16 @@
+body{
+    background-color: #412141;
+}
+
 video{
         display: block;
         margin: 0 auto;
         height: 100%;
+        border-radius: 50px;
 }
 .card-img-top{
     background-color: currentColor;
+    border-radius: 35px;
 }
 .grid1{
     display: grid !important;
@@ -21,4 +27,63 @@ video{
 .grid4{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr ;
+}
+#chat-window{
+    display:inline-flexbox !important;
+    border-radius: 25px;
+    border-color: aquamarine;
+}
+#btns{
+    position: fixed;
+    bottom: 0px;
+    padding: 20px;
+}
+#mic-button{
+    position: fixed;
+    bottom: 50px;
+    padding: 20px;
+    right: 1000px;
+    height: 60px;
+    line-height: 80px;  
+    width: 60px;  
+    font-size: 2em;
+    font-weight: bold;
+    border-radius: 50%;
+    background-color: #4CAF50;
+    color: white;
+    text-align:center;
+    cursor: pointer;
+}
+#cam-button{
+    position: fixed;
+    bottom: 50px;
+    padding: 20px;
+    right: 900px;
+    height: 60px;
+  line-height: 80px;  
+  width: 60px;  
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #8b20b2;
+  color: white;
+  text-align: center;
+  cursor: pointer;
+
+}
+#call-end-button{
+    position: fixed;
+    bottom: 50px;
+    padding: 20px;
+    right: 800px;
+    height: 60px;
+  line-height: 80px;  
+  width: 60px;  
+  font-size: 2em;
+  font-weight: bold;
+  border-radius: 50%;
+  background-color: #f40000;
+  color: white;
+  text-align: center;
+  cursor: pointer;
 }

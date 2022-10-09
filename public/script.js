@@ -2,6 +2,7 @@ const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 let templates = document.querySelector('#template')
 const chatMessages = document.getElementById('messages')
+const inputText = document.getElementById('inputText')
 var viewportHeight = window.innerHeight;
 let viewportWidth = window.innerWidth;
 var count = 0
@@ -123,7 +124,7 @@ function sendMsg() {
   for (let i = 0; i < peerIds.length; i++) {
     var conn = myPeer.connect(peerIds[i][i]);
     conn.on('open', function () {
-      const msg = 'Test Msg! from ' + myPeer.id
+      const msg = myPeer.id + ": " + inputText.value
       conn.send(msg);
       addMessageInChat(msg);
     });

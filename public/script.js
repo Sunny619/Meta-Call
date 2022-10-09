@@ -131,7 +131,7 @@ function sendMsg() {
     connections[i].send(msg);
   }
   addMessageInChat(msg);
-
+  //Fixes multiple connection issue
 }
 
 function addMessageInChat(data) {

@@ -5,11 +5,11 @@
 
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
         integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-        <link rel="stylesheet" type="text/css" href="style.css" crossorigin="anonymous">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="stylesheet" type="text/css" href="style.css" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script>
         const ROOM_ID = "<%= roomId %>"
     </script>
@@ -27,10 +27,17 @@
             </div>
 
         </div>
-        <div class="col-2">
-            Chat<br><hr>
-            <button onclick="sendMsg()">Send</button>
-            <div id = "messages">
+        <div class="col-2" style="height: 100vh; background-color: rgb(152, 233, 253);" >
+            <div class="container" style="display:flex; flex-direction: column; height: 100%;">
+                <div class="chat-heading" style="align-self:start;flex: auto;width: 100%;">
+                    <div>Chat</div>
+                    <div id="messages">
+                    </div>
+                </div>
+                <div class="chat-input"style="align-self:end; width: 100%;">
+                    <input type="text" id="inputText">
+                    <button onclick="sendMsg()">Send</button>
+                </div>
             </div>
         </div>
     </div>

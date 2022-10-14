@@ -2,6 +2,7 @@ const socket = io('/')
 const videoGrid = document.getElementById('video-grid')
 let templates = document.querySelector('#template')
 const chatMessages = document.getElementById('messages')
+const inputText = document.getElementById('inputText')
 var viewportHeight = window.innerHeight;
 let viewportWidth = window.innerWidth;
 var count = 0
@@ -12,18 +13,15 @@ const myVideo = document.createElement('video')
 let flag = 0;
 myVideo.muted = true
 const peers = {}
+connections = []
 navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
 }).then(stream => {
   addVideoStream(myVideo, stream)
+
   myPeer.on('connection', conn => {
-    conn.on('open', function () {
-      // Receive messages
-      conn.on('data', function (data) {
-        addMessageInChat(data)
-      });
-    });
+    handleConnection(conn)
   });
   myPeer.on('call', call => {
     call.answer(stream)
@@ -53,6 +51,7 @@ myPeer.on('open', id => {
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   conn = myPeer.connect(userId);
+  handleConnection(conn)
   const video = document.createElement('video')
   call.on('stream', userVideoStream => {
     //console.log("New user stream called");
@@ -64,7 +63,7 @@ function connectToNewUser(userId, stream) {
     //video.remove()
     video.parentElement.parentElement.parentElement.remove()
   })
-  peerIds.push(userId);
+  //peerIds.push(userId);
   peers[userId] = call
 }
 
@@ -116,21 +115,25 @@ function resizeCards() {
     listofcards[i].style.height = (viewportHeight / divider) - 2 + "px";
   }
 }
-function sendMsg() {
-
-  const peerIds = Object.entries(myPeer.connections);
-
-  for (let i = 0; i < peerIds.length; i++) {
-    var conn = myPeer.connect(peerIds[i][i]);
-    conn.on('open', function () {
-      const msg = 'Test Msg! from ' + myPeer.id
-      conn.send(msg);
-      addMessageInChat(msg);
+function handleConnection(conn) {
+  conn.on('open', function () {
+    // Receive messages
+    conn.on('data', function (data) {
+      addMessageInChat(data)
     });
+  });
+  connections.push(conn)
+}
+function sendMsg() {
+  const msg = myPeer.id + ": " + inputText.value
+  for (let i = 0; i < connections.length; i++) 
+  {
+    connections[i].send(msg);
   }
+  addMessageInChat(msg);
+  //Fixes multiple connection issue
 }
 
-function addMessageInChat(data)
-{
-  chatMessages.innerHTML+="<br>"+data
+function addMessageInChat(data) {
+  chatMessages.innerHTML += "<br>" + data
 }

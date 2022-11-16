@@ -15,7 +15,9 @@ app.use(express.static('views'));
 app.get('/', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
-
+app.get('/home', (req, res) => {
+  res.render('home')
+})
 app.get('/users', (req, res) => {
   res.send("Users: "+ Array.from(users))
 })

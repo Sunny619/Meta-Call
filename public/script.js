@@ -23,19 +23,16 @@ navigator.mediaDevices.getUserMedia({
   myPeer.on('connection', conn => {
     handleConnection(conn)
   });
+
   myPeer.on('call', call => {
     call.answer(stream)
-    const video = document.createElement('video')
-    call.on('stream', userVideoStream => {
-      console.log("Peercall called");
-      flag ^= 1;
-      if (flag)
-        addVideoStream(video, userVideoStream)
-    })
-  })
+    handleCall(call);
+    console.log("Oncall");
+  });
 
   socket.on('user-connected', userId => {
     connectToNewUser(userId, stream)
+    console.log("User connected");
   })
 })
 
@@ -49,16 +46,11 @@ myPeer.on('open', id => {
 })
 
 function connectToNewUser(userId, stream) {
+  console.log("Call made");
   const call = myPeer.call(userId, stream)
   conn = myPeer.connect(userId);
   handleConnection(conn)
-  const video = document.createElement('video')
-  call.on('stream', userVideoStream => {
-    //console.log("New user stream called");
-    flag ^= 1;
-    if (flag)
-      addVideoStream(video, userVideoStream)
-  })
+  handleCall(call)
   call.on('close', () => {
     //video.remove()
     video.parentElement.parentElement.parentElement.remove()
@@ -70,7 +62,6 @@ function connectToNewUser(userId, stream) {
 function addVideoStream(video, stream) {
   video.srcObject = stream
   video.addEventListener('loadedmetadata', () => {
-
     video.play()
   })
   blitNewUserVideo(video);
@@ -123,6 +114,17 @@ function handleConnection(conn) {
     });
   });
   connections.push(conn)
+}
+function handleCall(call)
+{
+  console.log("Handle Call Function Called");
+  const video = document.createElement('video')
+  call.on('stream', userVideoStream => {
+    console.log("Peercall called");
+    flag ^= 1;
+    if (flag)
+      addVideoStream(video, userVideoStream)
+    })
 }
 function sendMsg() {
   const msg = myPeer.id + ": " + inputText.value

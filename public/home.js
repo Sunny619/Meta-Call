@@ -16,13 +16,16 @@ logo.onmouseout = function(){
 //Currently finding ways to do that -Monish 
 function Transition(){
     alert("Testing Function");
-    delete(logo) //Doesnt work
-    //document.removeChild(logo);//doesnt work 
-    let create_meeting = document.createElement('button');
-    create_meeting.innerText = "Create Meetings";
-    create_meeting.location.href = '/def'
-    create_meeting.addEventListener('click',()=> {
-        roomId.setAttribute("href","/"+userRoomInput.value)
-    })
-    body.appendChild(create_meeting)
+    
+}
+const nav_links = document.querySelector(".nav-links");
+const menuBtn_open= document.querySelector("#menu-btn_open");
+const menuBtn_close= document.querySelector("#menu-btn_close");
+//console.log(nav_links,menuBtn_open,menuBtn_close);
+menuBtn_open.onclick = ()=> toggler();
+menuBtn_close.onclick = ()=> toggler();
+function toggler(){
+    nav_links.classList.toggle("active");
+    menuBtn_open.classList.toggle("close");
+    menuBtn_close.classList.toggle("open");
 }

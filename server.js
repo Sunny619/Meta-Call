@@ -12,11 +12,14 @@ app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.static('views'));
 
-app.get('/', (req, res) => {
+app.get('/room', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
   res.render('home')
+})
+app.get('/login',(req, res)=>{
+  res.render('login')
 })
 app.get('/users', (req, res) => {
   res.send("Users: "+ Array.from(users))

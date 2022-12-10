@@ -8,7 +8,8 @@ let viewportWidth = window.innerWidth;
 var count = 0
 var divider = 1
 window.addEventListener('resize', resizeCards);
-const myPeer = new Peer({ host: 'peerjs-server.herokuapp.com', secure: true, port: 443 })
+//const myPeer = new Peer({ host: 'peerjs-server.herokuapp.com', secure: true, port: 443 })
+const myPeer = new Peer()
 const myVideo = document.createElement('video')
 let flag = 0;
 myVideo.muted = true

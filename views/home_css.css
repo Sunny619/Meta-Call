@@ -1,20 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
-
-* {
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  height: 100vh;
-  width: 100vw;
-  background-color: #FBF8F1;
-  
+.FinalLook {
+  height: 300vm;
+  width: 100vm;
   display: flex;
   align-items: center;
   justify-content: center;
 }
-body.hovered {
+.FinalLook.hovered {
     background-color: black;
 }
 

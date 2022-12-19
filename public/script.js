@@ -6,6 +6,16 @@ const inputText = document.getElementById('inputText')
 const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
+
+//Class Declarations
+class User{
+  constructor(id, name, video){
+    this.id = id
+    this.name = name
+    this.video = video
+  }
+}
+const users = new Map();
 var viewportHeight = window.innerHeight;
 let viewportWidth = window.innerWidth;
 var count = 0
@@ -45,7 +55,15 @@ navigator.mediaDevices.getUserMedia({
 
 socket.on('user-disconnected', userId => {
   count--;
-  if (peers[userId]) peers[userId].close()
+  console.log("user left",userId)
+  if (peers[userId])
+  {
+    console.log("user left called",userId)
+    users.get(userId).video.parentElement.parentElement.parentElement.remove()
+    users.delete(userId)
+    peers[userId].close()
+    
+  } 
 })
 
 myPeer.on('open', id => {
@@ -58,12 +76,8 @@ function connectToNewUser(userId, stream) {
   conn = myPeer.connect(userId);
   handleConnection(conn)
   handleCall(call)
-  call.on('close', () => {
-    //video.remove()
-    video.parentElement.parentElement.parentElement.remove()
-  })
   //peerIds.push(userId);
-  peers[userId] = call
+  
 }
 
 function addVideoStream(video, stream) {
@@ -125,11 +139,18 @@ function handleConnection(conn) {
 function handleCall(call) {
   console.log("Handle Call Function Called");
   const video = document.createElement('video')
+  users.set(call.peer,new User(call.peer,"Name",video))
+  peers[call.peer] = call
   call.on('stream', userVideoStream => {
     console.log("Peercall called");
     flag ^= 1;
     if (flag)
       addVideoStream(video, userVideoStream)
+  })
+  call.on('close', () => {
+    //video.remove()
+    //console.log(userId,": left the call")
+    video.parentElement.parentElement.parentElement.remove()
   })
 }
 function sendMsg() {

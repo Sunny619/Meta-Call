@@ -22,3 +22,39 @@ video{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr ;
 }
+    
+.float{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+	position:fixed;
+	width:210px;
+	height:60px;
+	bottom:30px;
+	right: 50%;
+	text-align:center;
+}
+.float-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+	width:60px;
+	height:60px;
+	color:#FFF;
+    border-color: transparent;
+	border-radius:50px;
+	text-align:center;
+}
+.enabled-button{
+    background-color:rgb(102, 184, 64);
+}
+.disabled-button{
+    background-color:rgb(201, 26, 26);
+}
+
+a, u {
+  text-decoration: none;
+}

@@ -3,6 +3,9 @@ const videoGrid = document.getElementById('video-grid')
 let templates = document.querySelector('#template')
 const chatMessages = document.getElementById('messages')
 const inputText = document.getElementById('inputText')
+const videoButton = document.getElementById('cam-button')
+const muteButton = document.getElementById('mute-button')
+const endButton = document.getElementById('end-button')
 var viewportHeight = window.innerHeight;
 let viewportWidth = window.innerWidth;
 var count = 0
@@ -10,6 +13,7 @@ var divider = 1
 window.addEventListener('resize', resizeCards);
 //const myPeer = new Peer({ host: 'peerjs-server.herokuapp.com', secure: true, port: 443 })
 const myPeer = new Peer()
+let myStream;
 const myVideo = document.createElement('video')
 let flag = 0;
 myVideo.muted = true
@@ -19,6 +23,7 @@ navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
 }).then(stream => {
+  myStream = stream;
   addVideoStream(myVideo, stream)
 
   myPeer.on('connection', conn => {
@@ -36,6 +41,7 @@ navigator.mediaDevices.getUserMedia({
     console.log("User connected");
   })
 })
+
 
 socket.on('user-disconnected', userId => {
   count--;
@@ -116,8 +122,7 @@ function handleConnection(conn) {
   });
   connections.push(conn)
 }
-function handleCall(call)
-{
+function handleCall(call) {
   console.log("Handle Call Function Called");
   const video = document.createElement('video')
   call.on('stream', userVideoStream => {
@@ -125,12 +130,11 @@ function handleCall(call)
     flag ^= 1;
     if (flag)
       addVideoStream(video, userVideoStream)
-    })
+  })
 }
 function sendMsg() {
   const msg = myPeer.id + ": " + inputText.value
-  for (let i = 0; i < connections.length; i++) 
-  {
+  for (let i = 0; i < connections.length; i++) {
     connections[i].send(msg);
   }
   addMessageInChat(msg);
@@ -140,3 +144,27 @@ function sendMsg() {
 function addMessageInChat(data) {
   chatMessages.innerHTML += "<br>" + data
 }
+
+videoButton.addEventListener('click', () => {
+  const videoTrack = myStream.getTracks().find(track => track.kind === 'video');
+  if (videoTrack.enabled) {
+    videoTrack.enabled = false;
+    videoButton.className = "float-button disabled-button"
+  } else {
+    videoTrack.enabled = true;
+    videoButton.className = "float-button enabled-button"
+  }
+});
+muteButton.addEventListener('click', () => {
+  const audioTrack = myStream.getTracks().find(track => track.kind === 'audio');
+  if (audioTrack.enabled) {
+    audioTrack.enabled = false;
+    muteButton.className = "float-button disabled-button"
+  } else {
+    audioTrack.enabled = true;
+    muteButton.className = "float-button enabled-button"
+  }
+});
+endButton.addEventListener('click', () => {
+    endButton.className = "float-button disabled-button"
+});

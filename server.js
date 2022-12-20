@@ -32,7 +32,7 @@ app.get('/rooms', (req, res) => {
   //console.log(rooms)
 })
 app.get('/:room', (req, res) => {
-  if(!rooms.has(req.params.room)||rooms.get(req.params.room).size<=8)
+  if(!rooms.has(req.params.room)||rooms.get(req.params.room).size<=5)
     res.render('room', { roomId: req.params.room })
   else
     res.send("The room is full")
@@ -40,10 +40,9 @@ app.get('/:room', (req, res) => {
 
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId) => {
-    MapUser(roomId, userId)
-    socket.join(roomId)
-    socket.to(roomId).emit('user-connected', userId)
-
+      MapUser(roomId, userId)
+      socket.join(roomId)
+      socket.to(roomId).emit('user-connected', userId)
     socket.on('disconnect', () => {
       socket.to(roomId).emit('user-disconnected', userId)
       RemoveUser(roomId,userId);
@@ -68,8 +67,6 @@ function MapUser(roomId, userId)
 }
 function RemoveUser(roomId, userId)
 {
-    console.log(roomId, userId)
-    console.log(rooms.get(roomId))
     rooms.get(roomId).delete(userId);
     if (rooms.get(roomId).size==0)
     {

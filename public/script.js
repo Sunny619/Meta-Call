@@ -182,6 +182,7 @@ muteButton.addEventListener('click', () => {
 });
 endButton.addEventListener('click', () => {
     endButton.className = "float-button disabled-button"
+    window.location.href='/home'
 });
 chat.addEventListener('DOMNodeInserted',()=>{
   chat.scrollTop = chat.scrollHeight;

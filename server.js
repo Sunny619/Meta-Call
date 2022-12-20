@@ -72,6 +72,6 @@ function RemoveUser(roomId, userId)
     {
       rooms.delete(roomId);
     }
-    users.delete(roomId, userId);
+    users.delete(userId);
 }
 server.listen(port)

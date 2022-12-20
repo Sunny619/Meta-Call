@@ -62,8 +62,8 @@ socket.on('user-disconnected', userId => {
     users.get(userId).video.parentElement.parentElement.parentElement.remove()
     users.delete(userId)
     peers[userId].close()
-    
   } 
+  split()
 })
 
 myPeer.on('open', id => {
@@ -101,11 +101,7 @@ function blitNewUserVideo(video) {
 
 function split() {
   divider = 1;
-  if (count > 9) {
-    divider = 4
-    videoGrid.className = "grid4";
-  }
-  else if (count > 4) {
+ if (count > 4) {
     divider = 3
     videoGrid.className = "grid3";
   }

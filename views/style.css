@@ -18,11 +18,6 @@ video{
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
-.grid4{
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr ;
-}
-    
 .float{
     display: flex;
     gap: 5px;

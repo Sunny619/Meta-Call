@@ -50,6 +50,13 @@ video{
     background-color:rgb(201, 26, 26);
 }
 
-a, u {
-  text-decoration: none;
+.chat-heading {
+    border-radius: 3px;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 600;
+    background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
 }

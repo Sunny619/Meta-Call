@@ -6,7 +6,7 @@ const inputText = document.getElementById('inputText')
 const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
-
+var chat = document.getElementById("message-container"); 
 //Class Declarations
 class User{
   constructor(id, name, video){
@@ -183,3 +183,6 @@ muteButton.addEventListener('click', () => {
 endButton.addEventListener('click', () => {
     endButton.className = "float-button disabled-button"
 });
+chat.addEventListener('DOMNodeInserted',()=>{
+  chat.scrollTop = chat.scrollHeight;
+})

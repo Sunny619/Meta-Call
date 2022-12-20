@@ -100,20 +100,18 @@ function blitNewUserVideo(video) {
 }
 
 function split() {
-  divider = 1;
+divider = 1;
  if (count > 4) {
-    divider = 3
-    videoGrid.className = "grid3";
+  divider = 3
   }
   else if (count > 1) {
     divider = 2
-    videoGrid.className = "grid2";
   }
   else if (count == 1) {
     divider = 1
-    videoGrid.className = "grid1";
   }
-  resizeCards()
+  videoGrid.className = "grid"+divider.toString();
+  resizeCards();
 }
 
 function resizeCards() {

@@ -21,21 +21,35 @@
 
 <body>
     <div id="main" class="row" style="margin-right: 0px">
-        <div class="col-10">
+        <div id="call-buttons" class="float">
+            <button id="cam-button"  class="float-button enabled-button">
+                <font size="6"> 📷</font>
+            </button>
+            <button id="mute-button" class="float-button enabled-button">
+                <font size="6">🎤</font>
+            </button>
+            <button id="end-button" class="float-button enabled-button">
+                <font size="6">📞</font>
+            </button>
+        </div>
+
+        <div class="col-10" style="padding-right: 0px;">
             <div id="video-grid">
 
             </div>
 
         </div>
-        <div class="col-2" style="height: 100vh; background-color: rgb(152, 233, 253);" >
-            <div class="container" style="display:flex; flex-direction: column; height: 100%;">
-                <div class="chat-heading" style="align-self:start;flex: auto;width: 100%;">
-                    <div>Chat</div>
+        <div class="col-2" style="height: 100vh; padding: 0px;" >
+            <div class="container" style="display:flex; flex-direction: column; height: 100%; padding: 0px;">
+                <div style="background-color: currentColor; border-radius: 5px;">
+                    <div class="chat-heading" >Chat</div>
+                </div>
+                <div id = "message-container" style="align-self:start;flex: auto;width: 100%; padding: 0px; padding-left: 2px; overflow: auto; background-color: rgb(230, 230, 230);">
                     <div id="messages">
                     </div>
                 </div>
-                <div class="chat-input"style="align-self:end; width: 100%;">
-                    <input type="text" id="inputText">
+                <div class="chat-input"style="align-self:end; width: 100%; display:flex; gap:2px; padding:2px;">
+                    <input type="text" id="inputText" style="flex: auto; ">
                     <button onclick="sendMsg()">Send</button>
                 </div>
             </div>

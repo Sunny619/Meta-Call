@@ -5,7 +5,7 @@ const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
 
-const port  = process.env.PORT || 3000
+const port  = process.env.PORT || 3001
 let rooms = new Map()
 let users = new Set()
 app.set('view engine', 'ejs')

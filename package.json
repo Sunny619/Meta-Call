@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "Tstart":"concurrently \"npm run devStart\" \"npm run client\"",
+    "devStart": "nodemon server.js",
+    "client":"node start-client.js"
   },
   "keywords": [],
   "author": "",

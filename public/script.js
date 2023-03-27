@@ -6,10 +6,10 @@ const inputText = document.getElementById('inputText')
 const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
-var chat = document.getElementById("message-container"); 
+var chat = document.getElementById("message-container");
 //Class Declarations
-class User{
-  constructor(id, name, video){
+class User {
+  constructor(id, name, video) {
     this.id = id
     this.name = name
     this.video = video
@@ -20,46 +20,46 @@ const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
 
 function onResults(results) {
-    canvasCtx.save();
-    canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-    canvasCtx.drawImage(
-        results.image, 0, 0, canvasElement.width, canvasElement.height);
-    if (results.multiFaceLandmarks) {
-        for (const landmarks of results.multiFaceLandmarks) {
-            drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION,
-                { color: '#C0C0C070', lineWidth: 1 });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, { color: '#FF3030' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, { color: '#FF3030' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_IRIS, { color: '#FF3030' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYE, { color: '#30FF30' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, { color: '#30FF30' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_IRIS, { color: '#30FF30' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, { color: '#E0E0E0' });
-            drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, { color: '#E0E0E0' });
-        }
+  canvasCtx.save();
+  canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
+  canvasCtx.drawImage(
+    results.image, 0, 0, canvasElement.width, canvasElement.height);
+  if (results.multiFaceLandmarks) {
+    for (const landmarks of results.multiFaceLandmarks) {
+      // drawConnectors(canvasCtx, landmarks, FACEMESH_TESSELATION,
+        // { color: '#C0C0C070', lineWidth: 1 });
+      drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYE, { color: '#5D3FD3' });
+      // drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_EYEBROW, { color: '#FF3030' });
+      drawConnectors(canvasCtx, landmarks, FACEMESH_RIGHT_IRIS, { color: '#5D3FD3' });
+      drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYE, { color: '#5D3FD3' });
+      // drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_EYEBROW, { color: '#30FF30' });
+      drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_IRIS, { color: '#5D3FD3' });
+      // drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, { color: '#E0E0E0' });
+      // drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, { color: '#E0E0E0' });
     }
-    canvasCtx.restore();
+  }
+  canvasCtx.restore();
 }
 
 const faceMesh = new FaceMesh({
-    locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
-    }
+  locateFile: (file) => {
+    return `https://cdn.jsdelivr.net/npm/@mediapipe/face_mesh/${file}`;
+  }
 });
 faceMesh.setOptions({
-    maxNumFaces: 1,
-    refineLandmarks: true,
-    minDetectionConfidence: 0.5,
-    minTrackingConfidence: 0.5
+  maxNumFaces: 1,
+  refineLandmarks: true,
+  minDetectionConfidence: 0.5,
+  minTrackingConfidence: 0.5
 });
 faceMesh.onResults(onResults);
 
 const camera = new Camera(videoElement, {
-    onFrame: async () => {
-        await faceMesh.send({ image: videoElement });
-    },
-    width: 1280,
-    height: 720
+  onFrame: async () => {
+    await faceMesh.send({ image: videoElement });
+  },
+  width: 1280,
+  height: 720
 });
 camera.start();
 const users = new Map();
@@ -79,24 +79,25 @@ connections = []
 navigator.mediaDevices.getUserMedia({
   video: false,
   audio: true
-}).then(stream => {
-  myStream = stream; 
-  var tempStream = canvasElement.captureStream();
-  tempStream.addTrack(stream.getAudioTracks()[0]);
-  addVideoStream(myVideo, tempStream)
+}).then(audiostream => {
+
+  var stream = canvasElement.captureStream();
+  stream.addTrack(audiostream.getAudioTracks()[0]);
+  myStream = stream;
+  addVideoStream(myVideo, stream)
 
   myPeer.on('connection', conn => {
     handleConnection(conn)
   });
 
   myPeer.on('call', call => {
-    call.answer(tempStream)
+    call.answer(stream)
     handleCall(call);
     console.log("Oncall");
   });
 
   socket.on('user-connected', userId => {
-    connectToNewUser(userId, tempStream)
+    connectToNewUser(userId, stream)
     console.log("User connected");
   })
 })
@@ -104,14 +105,13 @@ navigator.mediaDevices.getUserMedia({
 
 socket.on('user-disconnected', userId => {
   count--;
-  console.log("user left",userId)
-  if (peers[userId])
-  {
-    console.log("user left called",userId)
+  console.log("user left", userId)
+  if (peers[userId]) {
+    console.log("user left called", userId)
     users.get(userId).video.parentElement.parentElement.parentElement.remove()
     users.delete(userId)
     peers[userId].close()
-  } 
+  }
   split()
 })
 
@@ -126,7 +126,7 @@ function connectToNewUser(userId, stream) {
   handleConnection(conn)
   handleCall(call)
   //peerIds.push(userId);
-  
+
 }
 
 function addVideoStream(video, stream) {
@@ -149,9 +149,9 @@ function blitNewUserVideo(video) {
 }
 
 function split() {
-divider = 1;
- if (count > 4) {
-  divider = 3
+  divider = 1;
+  if (count > 4) {
+    divider = 3
   }
   else if (count > 1) {
     divider = 2
@@ -159,7 +159,7 @@ divider = 1;
   else if (count == 1) {
     divider = 1
   }
-  videoGrid.className = "grid"+divider.toString();
+  videoGrid.className = "grid" + divider.toString();
   resizeCards();
 }
 
@@ -182,7 +182,7 @@ function handleConnection(conn) {
 function handleCall(call) {
   console.log("Handle Call Function Called");
   const video = document.createElement('video')
-  users.set(call.peer,new User(call.peer,"Name",video))
+  users.set(call.peer, new User(call.peer, "Name", video))
   peers[call.peer] = call
   call.on('stream', userVideoStream => {
     console.log("Peercall called");
@@ -230,9 +230,9 @@ muteButton.addEventListener('click', () => {
   }
 });
 endButton.addEventListener('click', () => {
-    endButton.className = "float-button disabled-button"
-    window.location.href='/home'
+  endButton.className = "float-button disabled-button"
+  window.location.href = '/home'
 });
-chat.addEventListener('DOMNodeInserted',()=>{
+chat.addEventListener('DOMNodeInserted', () => {
   chat.scrollTop = chat.scrollHeight;
 })

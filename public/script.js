@@ -77,24 +77,26 @@ myVideo.muted = true
 const peers = {}
 connections = []
 navigator.mediaDevices.getUserMedia({
-  video: true,
+  video: false,
   audio: true
 }).then(stream => {
-  myStream = stream;
-  addVideoStream(myVideo, canvasElement.captureStream())
+  myStream = stream; 
+  var tempStream = canvasElement.captureStream();
+  tempStream.addTrack(stream.getAudioTracks()[0]);
+  addVideoStream(myVideo, tempStream)
 
   myPeer.on('connection', conn => {
     handleConnection(conn)
   });
 
   myPeer.on('call', call => {
-    call.answer(canvasElement.captureStream())
+    call.answer(tempStream)
     handleCall(call);
     console.log("Oncall");
   });
 
   socket.on('user-connected', userId => {
-    connectToNewUser(userId, canvasElement.captureStream())
+    connectToNewUser(userId, tempStream)
     console.log("User connected");
   })
 })

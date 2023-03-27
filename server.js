@@ -15,6 +15,9 @@ app.use(express.static('views'));
 app.get('/', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
+app.get('/meta', (req, res) => {
+  res.render('meta')
+})
 app.get('/home', (req, res) => {
   res.render('home')
 })
@@ -29,7 +32,7 @@ app.get('/rooms', (req, res) => {
     reply += Array.from(value)
   });
   res.send("Rooms: "+  reply)
-  //console.log(rooms)
+  console.log(rooms)
 })
 app.get('/:room', (req, res) => {
   if(!rooms.has(req.params.room)||rooms.get(req.params.room).size<=5)

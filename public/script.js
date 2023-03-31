@@ -9,9 +9,10 @@ const endButton = document.getElementById('end-button')
 var chat = document.getElementById("message-container"); 
 //Class Declarations
 class User{
-  constructor(id, name){
+  constructor(id, name,video){
     this.id = id
     this.name = name
+    this.video = video
   }
   updateName(name)
   {
@@ -37,7 +38,7 @@ navigator.mediaDevices.getUserMedia({
   audio: true
 }).then(stream => {
   myStream = stream;
-  addVideoStream(myVideo, stream)
+  addVideoStream(myVideo, stream,myPeer.id)
 
   myPeer.on('connection', conn => {
     handleConnection(conn)
@@ -70,6 +71,7 @@ socket.on('user-disconnected', userId => {
 })
 socket.on('name-update', (userId,name) => { 
   console.log("Username:",name,"UserId:",userId)
+  updateNameArgs(name,userId)
 })
 myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)
@@ -85,23 +87,28 @@ function connectToNewUser(userId, stream) {
   
 }
 
-function addVideoStream(video, stream) {
+function addVideoStream(video, stream, userId) {
   video.srcObject = stream
   video.addEventListener('loadedmetadata', () => {
     video.play()
   })
-  blitNewUserVideo(video);
+  blitNewUserVideo(video,userId);
   split();
   //videoGrid.append(video)
 }
 
-function blitNewUserVideo(video) {
+function blitNewUserVideo(video,userId) {
   count++;
   let card = templates.content.cloneNode(true).querySelector('#call-card');
+  card.id = userId
   //console.log(card);
   let videoHolder = card.children[0].children[0];
   videoHolder.append(video);
   videoGrid.appendChild(card);
+
+  fetch("/name?uid="+ userId)
+    .then((response) => response.json())
+    .then((json) => updateNameArgs(json.name,userId));
 }
 
 function split() {
@@ -144,7 +151,7 @@ function handleCall(call) {
     console.log("Peercall called");
     flag ^= 1;
     if (flag)
-      addVideoStream(video, userVideoStream)
+      addVideoStream(video, userVideoStream, call.peer)
   })
   call.on('close', () => {
     //video.remove()
@@ -194,6 +201,15 @@ chat.addEventListener('DOMNodeInserted',()=>{
 })
 function updateName()
 {
-  var name = document.getElementById("inputName").value; 
+  var name = document.getElementById("inputName").value;
+  updateNameArgs(name,myPeer.id)
   socket.emit('name', name)
+}
+function updateNameArgs(name,pid)
+{
+  if(name==undefined)
+    name = "Name"
+  console.log(name)
+  var cardName = document.getElementById(pid).children[0].children[1].children[0];
+  cardName.innerHTML = name
 }

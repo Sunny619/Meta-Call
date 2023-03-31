@@ -8,12 +8,18 @@ const { v4: uuidV4 } = require('uuid')
 const port  = process.env.PORT || 3000
 let rooms = new Map()
 let users = new Set()
+let names = new Map()
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.static('views'));
 
 app.get('/', (req, res) => {
   res.redirect(`/${uuidV4()}`)
+})
+app.get('/name/', (req, res) => {
+  console.log(names.get(req.query.uid));
+  //res.send(names.get(req.query.uid))
+  res.json({ name: names.get(req.query.uid) })
 })
 app.get('/home', (req, res) => {
   res.render('home')
@@ -45,6 +51,7 @@ io.on('connection', socket => {
       socket.to(roomId).emit('user-connected', userId)
     socket.on('name', (name) => {
       console.log(userId)
+      names.set(userId,name)
         socket.to(roomId).emit('name-update', userId, name)
       })
     socket.on('disconnect', () => {
@@ -56,6 +63,7 @@ io.on('connection', socket => {
 
 function MapUser(roomId, userId)
 {
+  names.set(userId,"Name");
   if(!rooms.has(roomId))
   {
     let room = new Set();

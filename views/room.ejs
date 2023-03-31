@@ -12,7 +12,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script>
         const ROOM_ID = "<%= roomId %>"
+        
     </script>
+        <script>
+            let NAME = "<%= nameId %>"
+        </script>
+    
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
     <script src="/socket.io/socket.io.js" defer></script>
 
@@ -76,7 +81,7 @@
                               <button class="btn btn-primary mb-3" onclick="updateName()">Update Name</button>
                             </div>
                         </div>
-                        <div class="row g-2">
+                        <div class="row g-3">
                             <div class="col-auto">
                               <label for="inputPass" class="visually-hidden">Pass</label>
                               <input type="text" class="form-control" id="inputPass" placeholder="Password">
@@ -84,6 +89,9 @@
                             <div class="col-auto">
                               <button class="btn btn-primary mb-3" onclick="updatePass()">Update Pass</button>
                             </div>
+                            <div class="col-auto">
+                                <button class="btn btn-primary mb-3" onclick="fetchPass()">Fetch</button>
+                              </div>
                         </div>
                     </div>
                 </div>

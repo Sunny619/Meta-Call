@@ -7,6 +7,7 @@ const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
 var chat = document.getElementById("message-container"); 
+
 //Class Declarations
 class User{
   constructor(id, name,video){
@@ -37,6 +38,7 @@ navigator.mediaDevices.getUserMedia({
   video: true,
   audio: true
 }).then(stream => {
+  //socket.emit('selfName', NAME)
   myStream = stream;
   addVideoStream(myVideo, stream,myPeer.id)
 
@@ -109,10 +111,11 @@ function blitNewUserVideo(video,userId) {
   let videoHolder = card.children[0].children[0];
   videoHolder.append(video);
   videoGrid.appendChild(card);
-
+  
   fetch("/name?uid="+ userId)
     .then((response) => response.json())
     .then((json) => updateNameArgs(json.name,userId));
+    //
 }
 
 function split() {
@@ -221,4 +224,10 @@ function updatePass()
 {
   var pass = document.getElementById("inputPass").value;
   socket.emit('pass', pass)
+}
+function fetchPass()
+{
+  //var pass = document.getElementById("inputPass").value;
+  console.log("Fetch")
+  socket.emit('getPass')
 }

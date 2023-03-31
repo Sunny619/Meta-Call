@@ -10,12 +10,30 @@
 </head>
 
 <body>
-    <h1>Home</h1>
-    <input id="userRoom" type="text">
+    <h1 style="text-align:center">Meta-Call</h1>
+    <div style="padding: 10px;">
+        <div class="mb-3">
+            <label for="username" class="form-label">Name</label>
+            <input type="text" class="form-control" id="username">
+          </div>
+        <div class="mb-3">
+          <label for="roomcode" class="form-label">Room Code</label>
+          <input type="text" class="form-control" id="roomcode">
+        </div>
+        <div class="mb-3">
+          <label for="password" class="form-label">Password</label>
+          <input type="text" class="form-control" id="password">
+          <div class="form-text">Leave this blank, if you don't want to set a password</div>
+        </div>
+        <div style="text-align:center">
+            <button type="button"  class="btn btn-primary" onclick="join()">Create/Join</button>
+        </div>
+    </div>
+    <!-- <input id="userRoom" type="text">
     <input id="password" type="text">
     <a id="roomId" href="/def">
         <input type="submit" />
-    </a>
+    </a> -->
     <script src="home.js" defer></script>
     <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
         integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>

@@ -9,10 +9,13 @@ const endButton = document.getElementById('end-button')
 var chat = document.getElementById("message-container"); 
 //Class Declarations
 class User{
-  constructor(id, name, video){
+  constructor(id, name){
     this.id = id
     this.name = name
-    this.video = video
+  }
+  updateName(name)
+  {
+    this.name = name
   }
 }
 const users = new Map();
@@ -65,7 +68,9 @@ socket.on('user-disconnected', userId => {
   } 
   split()
 })
-
+socket.on('name-update', (userId,name) => { 
+  console.log("Username:",name,"UserId:",userId)
+})
 myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)
 })
@@ -187,3 +192,8 @@ endButton.addEventListener('click', () => {
 chat.addEventListener('DOMNodeInserted',()=>{
   chat.scrollTop = chat.scrollHeight;
 })
+function updateName()
+{
+  var name = document.getElementById("inputName").value; 
+  socket.emit('name', name)
+}

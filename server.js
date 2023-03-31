@@ -43,6 +43,10 @@ io.on('connection', socket => {
       MapUser(roomId, userId)
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId)
+    socket.on('name', (name) => {
+      console.log(userId)
+        socket.to(roomId).emit('name-update', userId, name)
+      })
     socket.on('disconnect', () => {
       socket.to(roomId).emit('user-disconnected', userId)
       RemoveUser(roomId,userId);

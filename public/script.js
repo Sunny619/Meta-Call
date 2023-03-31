@@ -34,8 +34,22 @@ let flag = 0;
 myVideo.muted = true
 const peers = {}
 connections = []
-navigator.mediaDevices.getUserMedia({
-  video: true,
+let camswitch = 0
+if(camswitch == 1)
+{
+function getConnectedDevices(type, callback) {
+  navigator.mediaDevices.enumerateDevices()
+      .then(devices => {
+          const filtered = devices.filter(device => device.kind === type);
+          callback(filtered);
+      });
+}
+
+getConnectedDevices('videoinput', cameras => navigator.mediaDevices.getUserMedia({
+  video: {
+    deviceId: {
+      exact: cameras[1].deviceId,
+    }},
   audio: true
 }).then(stream => {
   //socket.emit('selfName', NAME)
@@ -56,8 +70,34 @@ navigator.mediaDevices.getUserMedia({
     connectToNewUser(userId, stream)
     console.log("User connected");
   })
-})
-
+}))
+}
+else
+{
+  navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true
+  }).then(stream => {
+    //socket.emit('selfName', NAME)
+    myStream = stream;
+    addVideoStream(myVideo, stream,myPeer.id)
+  
+    myPeer.on('connection', conn => {
+      handleConnection(conn)
+    });
+  
+    myPeer.on('call', call => {
+      call.answer(stream)
+      handleCall(call);
+      console.log("Oncall");
+    });
+  
+    socket.on('user-connected', userId => {
+      connectToNewUser(userId, stream)
+      console.log("User connected");
+    })
+  })
+}
 
 socket.on('user-disconnected', userId => {
   count--;

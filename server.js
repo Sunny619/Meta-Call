@@ -9,6 +9,7 @@ const port  = process.env.PORT || 3000
 let rooms = new Map()
 let users = new Set()
 let names = new Map()
+let passwords = new Map()
 app.set('view engine', 'ejs')
 app.use(express.static('public'))
 app.use(express.static('views'));
@@ -17,7 +18,7 @@ app.get('/', (req, res) => {
   res.redirect(`/${uuidV4()}`)
 })
 app.get('/name/', (req, res) => {
-  console.log(names.get(req.query.uid));
+  //console.log(names.get(req.query.uid));
   //res.send(names.get(req.query.uid))
   res.json({ name: names.get(req.query.uid) })
 })
@@ -38,10 +39,17 @@ app.get('/rooms', (req, res) => {
   //console.log(rooms)
 })
 app.get('/:room', (req, res) => {
-  if(!rooms.has(req.params.room)||rooms.get(req.params.room).size<=5)
+  //&&req.query.pass == "0000"
+  if(!passwords.has(req.params.room))
+  {
+    passwords.set(req.params.room,"0000")
+    console.log("init room")
+  }
+  console.log(passwords.get(req.params.room))
+  if(!rooms.has(req.params.room)||(rooms.get(req.params.room).size<=5&&(passwords.get(req.params.room)=="0000"||req.query.pass == passwords.get(req.params.room))))
     res.render('room', { roomId: req.params.room })
   else
-    res.send("The room is full")
+    res.send("Access Denied")
 })
 
 io.on('connection', socket => {
@@ -50,10 +58,14 @@ io.on('connection', socket => {
       socket.join(roomId)
       socket.to(roomId).emit('user-connected', userId)
     socket.on('name', (name) => {
-      console.log(userId)
       names.set(userId,name)
         socket.to(roomId).emit('name-update', userId, name)
       })
+      socket.on('pass', (pass) => {
+        names.set(roomId,pass)
+          socket.to(roomId).emit('pass-update', pass)
+          passwords.set(roomId,pass)
+        })
     socket.on('disconnect', () => {
       socket.to(roomId).emit('user-disconnected', userId)
       RemoveUser(roomId,userId);

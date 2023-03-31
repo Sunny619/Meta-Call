@@ -73,6 +73,10 @@ socket.on('name-update', (userId,name) => {
   console.log("Username:",name,"UserId:",userId)
   updateNameArgs(name,userId)
 })
+socket.on('pass-update', (pass) => { 
+  console.log(pass)
+  document.getElementById("inputPass").value=pass
+})
 myPeer.on('open', id => {
   socket.emit('join-room', ROOM_ID, id)
 })
@@ -212,4 +216,9 @@ function updateNameArgs(name,pid)
   console.log(name)
   var cardName = document.getElementById(pid).children[0].children[1].children[0];
   cardName.innerHTML = name
+}
+function updatePass()
+{
+  var pass = document.getElementById("inputPass").value;
+  socket.emit('pass', pass)
 }

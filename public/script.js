@@ -15,6 +15,12 @@ class User {
     this.video = video
   }
 }
+var imgloaded = false;
+var img = new Image();
+img.onload = function() {
+  imgloaded = true;
+}
+img.src = 'images/cig.png';
 const videoElement = document.getElementsByClassName('input_video')[0];
 const canvasElement = document.getElementsByClassName('output_canvas')[0];
 const canvasCtx = canvasElement.getContext('2d');
@@ -36,6 +42,12 @@ function onResults(results) {
       drawConnectors(canvasCtx, landmarks, FACEMESH_LEFT_IRIS, { color: '#5D3FD3' });
       // drawConnectors(canvasCtx, landmarks, FACEMESH_FACE_OVAL, { color: '#E0E0E0' });
       // drawConnectors(canvasCtx, landmarks, FACEMESH_LIPS, { color: '#E0E0E0' });
+      //console.log(landmarks[0].x);
+      // if(imgloaded)
+      //   canvasCtx.drawImage(img, landmarks[0].x*canvasElement.width, landmarks[0].y*canvasElement.height);
+      if(imgloaded)
+        canvasCtx.drawImage(img, landmarks[3].x*canvasElement.width-20,landmarks[3].y*canvasElement.height-30,150,150);
+      console.log(canvasElement.width/2);
     }
   }
   canvasCtx.restore();

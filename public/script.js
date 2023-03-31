@@ -7,7 +7,7 @@ const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
 var chat = document.getElementById("message-container"); 
-
+document.getElementById("inputName").value = NAME
 //Class Declarations
 class User{
   constructor(id, name,video){
@@ -111,7 +111,8 @@ function blitNewUserVideo(video,userId) {
   let videoHolder = card.children[0].children[0];
   videoHolder.append(video);
   videoGrid.appendChild(card);
-  
+  if(userId == myPeer.id)
+    updateName();
   fetch("/name?uid="+ userId)
     .then((response) => response.json())
     .then((json) => updateNameArgs(json.name,userId));

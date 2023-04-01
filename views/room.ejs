@@ -12,12 +12,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <script>
         const ROOM_ID = "<%= roomId %>"
-        
+        const NAME = "<%= nameId %>"
+        const PASS = "<%= passId %>"
+        const camswitch  = "<%= camId %>"
     </script>
-        <script>
-            let NAME = "<%= nameId %>"
-        </script>
-    
+    <!-- <script>
+        
+    </script> -->
+
     <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
     <script src="/socket.io/socket.io.js" defer></script>
 
@@ -56,7 +58,8 @@
                             aria-selected="false">Settings</button>
                 </nav>
                 <div class="tab-content" id="nav-tabContent" style="display:flex; height: 100%; overflow: auto">
-                    <div class="tab-pane fade show active" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab" style="width:100%">
+                    <div class="tab-pane fade show active" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab"
+                        style="width:100%">
                         <div class="container"
                             style="display:flex; flex-direction: column; height: 100%; padding: 0px;">
                             <div id="message-container"
@@ -72,31 +75,31 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="nav-settings" role="tabpanel" aria-labelledby="nav-settings-tab">
-                        <div class="row g-2">
-                            <div class="col-auto">
-                              <label for="inputName" class="visually-hidden">Name</label>
-                              <input type="text" class="form-control" id="inputName" placeholder="Name">
+                        <fieldset disabled>
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label for="inputName" class="form-label">Name</label>
+                                    <input type="text" class="form-control" id="inputName" placeholder="Name">
+                                </div>
                             </div>
-                            <div class="col-auto">
-                              <button class="btn btn-primary mb-3" onclick="updateName()">Update Name</button>
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label for="inputRoom" class="form-label">Room Code</label>
+                                    <input type="text" class="form-control" id="inputRoom" placeholder="Room">
+                                </div>
                             </div>
-                        </div>
-                        <div class="row g-3">
-                            <div class="col-auto">
-                              <label for="inputPass" class="visually-hidden">Pass</label>
-                              <input type="text" class="form-control" id="inputPass" placeholder="Password">
-                            </div>
-                            <div class="col-auto">
-                              <button class="btn btn-primary mb-3" onclick="updatePass()">Update Pass</button>
-                            </div>
-                            <div class="col-auto">
-                                <button class="btn btn-primary mb-3" onclick="fetchPass()">Fetch</button>
-                              </div>
-                        </div>
+                            <div class="row g-2">
+                                <div class="col-auto">
+                                    <label for="inputPass" class="form-label">Password</label>
+                                    <input type="text" class="form-control" id="inputPass" placeholder="Password">
+                                </div>
+                        </fieldset>
                     </div>
+
                 </div>
             </div>
         </div>
+    </div>
     </div>
 
 

@@ -2,6 +2,7 @@ let userRoomInput =document.getElementById("roomcode")
 let roomId =document.getElementById("roomId")
 let pass =document.getElementById("password")
 let name1 =document.getElementById("username")
+let cam =document.getElementById("cam")
 let roomval = ""
 let passval = ""
 // userRoomInput.onchange = () =>{
@@ -14,5 +15,5 @@ let passval = ""
 // }
 function join()
 {
-    window.location = "/"+userRoomInput.value+"?pass="+pass.value+"&username="+name1.value;
+    window.location = "/"+userRoomInput.value+"?pass="+pass.value+"&username="+name1.value+"&cam="+cam.value;
 }

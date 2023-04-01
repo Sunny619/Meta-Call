@@ -8,6 +8,8 @@ const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
 var chat = document.getElementById("message-container"); 
 document.getElementById("inputName").value = NAME
+document.getElementById("inputPass").value = PASS
+document.getElementById("inputRoom").value = ROOM_ID
 //Class Declarations
 class User{
   constructor(id, name,video){
@@ -34,7 +36,8 @@ let flag = 0;
 myVideo.muted = true
 const peers = {}
 connections = []
-let camswitch = 0
+//let camswitch = 1
+//camswitch = int(camswitch)
 if(camswitch == 1)
 {
 function getConnectedDevices(type, callback) {
@@ -111,16 +114,16 @@ socket.on('user-disconnected', userId => {
   } 
   split()
 })
-socket.on('name-update', (userId,name) => { 
-  console.log("Username:",name,"UserId:",userId)
-  updateNameArgs(name,userId)
-})
-socket.on('pass-update', (pass) => { 
-  console.log(pass)
-  document.getElementById("inputPass").value=pass
-})
+// socket.on('name-update', (userId,name) => { 
+//   console.log("Username:",name,"UserId:",userId)
+//   updateNameArgs(name,userId)
+// })
+// socket.on('pass-update', (pass) => { 
+//   console.log(pass)
+//   document.getElementById("inputPass").value=pass
+// })
 myPeer.on('open', id => {
-  socket.emit('join-room', ROOM_ID, id)
+  socket.emit('join-room', ROOM_ID, id, NAME)
 })
 
 function connectToNewUser(userId, stream) {
@@ -151,12 +154,10 @@ function blitNewUserVideo(video,userId) {
   let videoHolder = card.children[0].children[0];
   videoHolder.append(video);
   videoGrid.appendChild(card);
-  if(userId == myPeer.id)
-    updateName();
   fetch("/name?uid="+ userId)
     .then((response) => response.json())
     .then((json) => updateNameArgs(json.name,userId));
-    //
+    
 }
 
 function split() {
@@ -247,28 +248,31 @@ endButton.addEventListener('click', () => {
 chat.addEventListener('DOMNodeInserted',()=>{
   chat.scrollTop = chat.scrollHeight;
 })
-function updateName()
-{
-  var name = document.getElementById("inputName").value;
-  updateNameArgs(name,myPeer.id)
-  socket.emit('name', name)
-}
+// function updateName()
+// {
+//   var name = document.getElementById("inputName").value;
+//   updateNameArgs(name,myPeer.id)
+//   socket.emit('name', name)
+// }
 function updateNameArgs(name,pid)
 {
+  console.log(NAME)
+  if (pid == myPeer.id)
+    name = NAME;
   if(name==undefined)
     name = "Name"
-  console.log(name)
+  //console.log(name)
   var cardName = document.getElementById(pid).children[0].children[1].children[0];
   cardName.innerHTML = name
 }
-function updatePass()
-{
-  var pass = document.getElementById("inputPass").value;
-  socket.emit('pass', pass)
-}
-function fetchPass()
-{
-  //var pass = document.getElementById("inputPass").value;
-  console.log("Fetch")
-  socket.emit('getPass')
-}
+// function updatePass()
+// {
+//   var pass = document.getElementById("inputPass").value;
+//   socket.emit('pass', pass)
+// }
+// function fetchPass()
+// {
+//   //var pass = document.getElementById("inputPass").value;
+//   console.log("Fetch")
+//   socket.emit('getPass')
+// }

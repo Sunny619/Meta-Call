@@ -46,8 +46,8 @@ app.get('/:room', (req, res) => {
     passwords.set(req.params.room, req.query.pass)
     //console.log("init room")
   }
-  //onsole.log(passwords.get(req.params.room))
-  if (!rooms.has(req.params.room) || (rooms.get(req.params.room).size <= 5 && (passwords.get(req.params.room) == "" || req.query.pass == passwords.get(req.params.room))))
+  console.log(passwords.get(req.params.room))
+  if (!rooms.has(req.params.room) || (rooms.get(req.params.room).size <= 5 && (passwords.get(req.params.room) == undefined || req.query.pass == passwords.get(req.params.room))))
     res.render('room', { roomId: req.params.room, nameId: req.query.username, passId: req.query.pass, camId:  req.query.cam})
   else
     res.send("Access Denied")
@@ -56,26 +56,11 @@ app.get('/:room', (req, res) => {
 io.on('connection', socket => {
   socket.on('join-room', (roomId, userId, name) => {
     names.set(userId, name)
-    //console.log(names)
+
     MapUser(roomId, userId)
     socket.join(roomId)
     socket.to(roomId).emit('user-connected', userId)
-    //socket.on('name', (name) => {
-      
-      //socket.nsp.to(roomId).emit('name-update', userId, name)
-      //socket.to(roomId).emit('name-update', userId, name)
-    //})
-    // socket.on('selfName', (name) => {
-    //   names.set(userId, name)
-    // })
-    // socket.on('pass', (pass) => {
-    //   names.set(roomId, pass)
-    //   socket.to(roomId).emit('pass-update', pass)
-    //   passwords.set(roomId, pass)
-    // })
-    // socket.on('getPass', (pass) => {
-    //   socket.nsp.to(roomId).emit('pass-update', passwords.get(roomId))
-    // })
+
     socket.on('disconnect', () => {
       socket.to(roomId).emit('user-disconnected', userId)
       RemoveUser(roomId, userId);

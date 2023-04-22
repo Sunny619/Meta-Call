@@ -1,0 +1,62 @@
+video{
+        display: block;
+        margin: 0 auto;
+        height: 100%;
+}
+.card-img-top{
+    background-color: currentColor;
+}
+.grid1{
+    display: grid !important;
+    grid-template-columns: 1fr !important;
+}
+.grid2{
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+}
+.grid3{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
+.float{
+    display: flex;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+	position:fixed;
+	width:210px;
+	height:60px;
+	bottom:30px;
+	right: 50%;
+	text-align:center;
+}
+.float-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+	width:60px;
+	height:60px;
+	color:#FFF;
+    border-color: transparent;
+	border-radius:50px;
+	text-align:center;
+}
+.enabled-button{
+    background-color:rgb(102, 184, 64);
+}
+.disabled-button{
+    background-color:rgb(201, 26, 26);
+}
+
+.chat-heading {
+    border-radius: 3px;
+    text-align: center;
+    font-size: 2.5em;
+    font-weight: 600;
+    background-image: conic-gradient(#553c9a, #ee4b2b, #00c2cb, #553c9a);
+    color: transparent;
+    background-clip: text;
+    -webkit-background-clip: text;
+}

@@ -1,28 +1,19 @@
-let userRoomInput =document.getElementById("userRoom")
+let userRoomInput =document.getElementById("roomcode")
 let roomId =document.getElementById("roomId")
-userRoomInput.onchange = () =>{
-    roomId.setAttribute("href","/"+userRoomInput.value)
-}
-let body = document.body;
-var logo = document.getElementsByClassName("gradient-text");
-let HomePage = document.getElementsByClassName("Homepage");
-logo.onmouseover = function(){  
-    body.className = 'hovered'
-}
-logo.onmouseout = function(){
-    body.className = ''
-}
-// This Fuction is meant to Remove the Initial logo and add elements like the create meeting button and Add most of the elements into home.ejs
-//Currently finding ways to do that -Monish 
-function Transition(){
-    alert("Testing Function");
-    delete(logo) //Doesnt work
-    //document.removeChild(logo);//doesnt work 
-    let create_meeting = document.createElement('button');
-    create_meeting.innerText = "Create Meetings";
-    create_meeting.location.href = '/def'
-    create_meeting.addEventListener('click',()=> {
-        roomId.setAttribute("href","/"+userRoomInput.value)
-    })
-    body.appendChild(create_meeting)
+let pass =document.getElementById("password")
+let name1 =document.getElementById("username")
+let cam =document.getElementById("cam")
+let roomval = ""
+let passval = ""
+// userRoomInput.onchange = () =>{
+//     roomval = userRoomInput.value
+//     roomId.setAttribute("href","/"+roomval+"?pass="+passval)
+// }
+// pass.onchange = () =>{
+//     passval = pass.value
+//     roomId.setAttribute("href","/"+roomval+"?pass="+passval)
+// }
+function join()
+{
+    window.location = "/"+userRoomInput.value+"?pass="+pass.value+"&username="+name1.value+"&cam="+cam.value;
 }

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="path/to/rstyle.css">
+    <script src="/public/rooms.js" defer></script>
+    <title>Rooms</title>
+</head>
+</head>
+<body>
+  <h1>Rooms</h1>
+  <% rooms.forEach(room => { %>
+    <div class="room">
+      <h2><%= room.name %></h2>
+      <p>Users:</p>
+      <ul>
+        <% room.users.forEach(user => { %>
+          <li><%= user %></li>
+        <% }) %>
+      </ul>
+    </div>
+  <% }) %>
+</body>
+</html>
+</html>

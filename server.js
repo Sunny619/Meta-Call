@@ -35,6 +35,7 @@ app.get('/rooms', (req, res) => {
     roomArray.push({ name: key, users: Array.from(value) });
   });
   res.render('rooms', { rooms: roomArray });
+
 })
 
 app.get('/:room', (req, res) => {

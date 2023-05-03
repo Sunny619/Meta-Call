@@ -8,40 +8,144 @@
     integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meta-Call</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap');
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(-45deg, #7200ca, #962fbf, #355de0,#1E90FF);
+      background-size: 400% 400%;
+      animation: gradient 10s ease infinite;
+    }
+    @keyframes gradient {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+    
+    h1 {
+      font-family: 'Nunito', sans-serif;
+      font-size: 48px;
+      text-align: center;
+      margin-top: 50px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input {
+      font-size: 18px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+      margin-bottom: 20px;
+    }
+
+    select {
+      font-size: 18px;
+      padding: 10px;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-size: 24px;
+      font-weight: bold;
+      background-color: #007bff;
+      color: #ffffff;
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    button:hover {
+      background-color: #0062cc;
+    }
+
+    .form-text {
+      font-size: 14px;
+      color: #6c757d;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
+      border-radius: 10px;
+      background-color: #ffffff;
+    }
+    .download-api {
+  flex-basis: 48%;
+}
+
+.download-api {
+  text-align: center;
+  font-size: 24px;
+}
+
+@media (max-width: 768px) {
+  .input-fields,
+  .download-api {
+    flex-basis: 100%;
+  }
+}
+  </style>
 </head>
 
 <body>
-  <h1 style="text-align:center">Meta-Call</h1>
-  <div style="padding: 10px;">
-    <div class="mb-3">
-      <label for="username" class="form-label">Name</label>
-      <input type="text" class="form-control" id="username">
-    </div>
-    <div class="mb-3">
-      <label for="roomcode" class="form-label">Room Code</label>
-      <input type="text" class="form-control" id="roomcode">
-    </div>
-    <div class="mb-3">
-      <label for="password" class="form-label">Password</label>
-      <input type="text" class="form-control" id="password">
-      <div class="form-text">Leave this blank, if you don't want to set a password</div>
-    </div>
-    <div class="mb-3">
-      <label class="form-label">Camera</label>
-      <select id="cam" class="form-select form-select-sm" aria-label=".form-select-sm example">
-        <option value="0">Normal Camera</option>
-        <option value="1">Meta Camera</option>
-      </select>
-    </div>
-    <div style="text-align:center">
-      <button type="button" class="btn btn-primary" onclick="join()">Create/Join</button>
+  <br><br>
+  <div class="container">
+    <h1>Meta-Call</h1>
+      <p>
+      Enjoy the new way of Videocalling by using avatars instead of using your Face.
+      Choose from our wide range of avatars and interact move with the people you love
+    </p>
+    <form>
+      <div class="mb-3">
+        <label for="username">Name</label>
+        <input type="text" id="username">
+      </div>
+      <div class="mb-3">
+        <label for="roomcode">Room Code</label>
+        <input type="text" id="roomcode">
+      </div>
+      <div class="mb-3">
+        <label for="password">Password</label>
+        <input type="text" id="password">
+        <div class="form-text">Leave this blank, if you don't want to set a password</div>
+      </div>
+      <div class="mb-3">
+        <label>Camera</label>
+        <select id="cam">
+          <option value="0">Normal Camera</option>
+          <option value="1">Meta Camera</option>
+        </select>
+      </div>
+      <div style="text-align:center">
+        <button type="button" onclick="join()">Create/Join</button>
+      </div>
+    </form>
+    <div class="download-api mb-3" style="display: ruby;">
+      <p>To use Meta-Call, download the API below:</p>
+      <button type="button" class="btn btn-primary">Download API</button>
     </div>
   </div>
-  <!-- <input id="userRoom" type="text">
-    <input id="password" type="text">
-    <a id="roomId" href="/def">
-        <input type="submit" />
-    </a> -->
+
   <script src="home.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
     integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>

@@ -29,15 +29,23 @@ app.get('/home', (req, res) => {
 app.get('/users', (req, res) => {
   res.send("Users: " + Array.from(users))
 })
+// app.get('/rooms', (req, res) => {
+//   reply = "<br>"
+//   rooms.forEach((value, key) => {
+//     reply += "<br>"
+//     reply += "<b>" + key + " :</b> "
+//     reply += Array.from(value)
+//   });
+//   res.send("Rooms: " + reply)
+//   //console.log(rooms)
+// })
 app.get('/rooms', (req, res) => {
-  reply = "<br>"
+  let roomArray = [];
   rooms.forEach((value, key) => {
-    reply += "<br>"
-    reply += "<b>" + key + " :</b> "
-    reply += Array.from(value)
+    roomArray.push({ name: key, users: Array.from(value) });
   });
-  res.send("Rooms: " + reply)
-  //console.log(rooms)
+  res.render('rooms', { rooms: roomArray });
+
 })
 
 app.get('/:room', (req, res) => {
@@ -46,8 +54,8 @@ app.get('/:room', (req, res) => {
     passwords.set(req.params.room, req.query.pass)
     //console.log("init room")
   }
-  console.log(passwords.get(req.params.room))
-  if (!rooms.has(req.params.room) || (rooms.get(req.params.room).size <= 5 && (passwords.get(req.params.room) == undefined || req.query.pass == passwords.get(req.params.room))))
+  //console.log(passwords.get(req.params.room))
+  if (!rooms.has(req.params.room) || (rooms.get(req.params.room).size <= 5 && (passwords.get(req.params.room) == undefined || passwords.get(req.params.room) == ""|| req.query.pass == passwords.get(req.params.room))))
     res.render('room', { roomId: req.params.room, nameId: req.query.username, passId: req.query.pass, camId:  req.query.cam})
   else
     res.send("Access Denied")

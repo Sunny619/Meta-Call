@@ -4,6 +4,7 @@ const app = express()
 const server = require('http').Server(app)
 const io = require('socket.io')(server)
 const { v4: uuidV4 } = require('uuid')
+const bodyParser = require("body-parser")
 
 const port = process.env.PORT || 3000
 let rooms = new Map()
@@ -11,6 +12,9 @@ let users = new Set()
 let names = new Map()
 let passwords = new Map()
 app.set('view engine', 'ejs')
+app.use(bodyParser.urlencoded({
+  extended:true
+}));
 app.use(express.static('public'))
 app.use(express.static('views'));
 
@@ -48,17 +52,17 @@ app.get('/rooms', (req, res) => {
 
 })
 
-app.get('/:room', (req, res) => {
-  //&&req.query.pass == "0000"
-  if (!passwords.has(req.params.room)) {
-    passwords.set(req.params.room, req.query.pass)
-    //console.log("init room")
+app.post('/room', (req, res) => {
+  const {username,roomcode,password,cam} = req.body;
+  if (!passwords.has(roomcode)) {
+    passwords.set(roomcode, password)
   }
-  //console.log(passwords.get(req.params.room))
-  if (!rooms.has(req.params.room) || (rooms.get(req.params.room).size <= 5 && (passwords.get(req.params.room) == undefined || passwords.get(req.params.room) == ""|| req.query.pass == passwords.get(req.params.room))))
-    res.render('room', { roomId: req.params.room, nameId: req.query.username, passId: req.query.pass, camId:  req.query.cam})
+  if (!rooms.has(roomcode) || (rooms.get(roomcode).size <= 5 && (passwords.get(roomcode) == undefined || passwords.get(roomcode) == ""|| password == passwords.get(roomcode))))
+    res.render('room', { roomId: roomcode, nameId: username, passId: password, camId:  cam})
   else
     res.send("Access Denied")
+  // console.log(req.body);
+  // res.send(req.body);
 })
 
 io.on('connection', socket => {

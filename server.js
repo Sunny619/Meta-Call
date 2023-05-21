@@ -61,8 +61,7 @@ app.post('/room', (req, res) => {
     res.render('room', { roomId: roomcode, nameId: username, passId: password, camId:  cam})
   else
     res.send("Access Denied")
-  // console.log(req.body);
-  // res.send(req.body);
+
 })
 
 io.on('connection', socket => {

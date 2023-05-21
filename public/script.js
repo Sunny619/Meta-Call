@@ -133,7 +133,6 @@ function addVideoStream(video, stream, userId) {
   })
   blitNewUserVideo(video, userId);
   split();
-  //videoGrid.append(video)
 }
 
 function blitNewUserVideo(video, userId) {
@@ -144,13 +143,6 @@ function blitNewUserVideo(video, userId) {
   let videoHolder = card.children[0].children[0];
   videoHolder.append(video);
   videoGrid.appendChild(card);
-  console.log("NEW" + userId + " : ")
-  // if(!users.has(myPeer.id))
-  // {
-  //   console.log("HALLO")
-  //   mapSelf()
-  // }
-
   mapUser(userId, video)
   if (ROOM_ID != undefined) {
     document.getElementById("inputName").value = NAME
@@ -193,9 +185,6 @@ function handleConnection(conn) {
 function handleCall(call) {
   console.log("Handle Call Function Called");
   const video = document.createElement('video')
-
-  //users.set(call.peer,"Name")
-  //mapUser(userId,video)
   peers[call.peer] = call
   call.on('stream', userVideoStream => {
     console.log("Peercall called");

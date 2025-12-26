@@ -265,7 +265,7 @@ video{
 
 .float{
     display:flex;
-    gap:8px;
+    gap:12px;
     justify-content:center;
     align-items:center;
     z-index:1000;
@@ -274,46 +274,68 @@ video{
     left:50%;
     transform:translateX(-50%);
     background:#ffffff;
-    padding:8px;
-    border-radius:12px;
-    box-shadow:0 4px 12px rgba(0,0,0,0.12);
+    padding:12px 16px;
+    border-radius:14px;
+    box-shadow:0 8px 24px rgba(0,0,0,0.12);
+    border:1px solid #e5e7eb;
 }
 
 .float-button{
     display:flex;
     justify-content:center;
     align-items:center;
-    z-index:100;
-    width:52px;
-    height:52px;
+    z-index:1000;
+    width:56px;
+    height:56px;
     color:#ffffff;
     border:none;
     border-radius:50%;
     text-align:center;
     cursor:pointer;
     transition:all .2s ease;
-    font-size:20px;
+    font-size:24px;
+    font-weight:600;
+    box-shadow:0 4px 12px rgba(0,0,0,0.1);
+    position:relative;
+    overflow:hidden;
+}
+
+.float-button::before{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(circle at 30% 30%, rgba(255,255,255,0.2), transparent);
+    opacity:0;
+    transition:opacity .2s ease;
+}
+
+.float-button:hover::before{
+    opacity:1;
 }
 
 .float-button:hover{
-    transform:scale(1.08);
-    box-shadow:0 4px 12px rgba(0,0,0,0.2);
+    transform:scale(1.1);
+    box-shadow:0 6px 16px rgba(0,0,0,0.15);
+}
+
+.float-button:active{
+    transform:scale(0.95);
 }
 
 .enabled-button{
-    background:#10b981;
+    background:linear-gradient(135deg, #10b981, #059669);
 }
 
 .enabled-button:hover{
-    background:#059669;
+    background:linear-gradient(135deg, #059669, #047857);
 }
 
 .disabled-button{
-    background:#ef4444;
+    background:linear-gradient(135deg, #ef4444, #dc2626);
 }
 
 .disabled-button:hover{
-    background:#dc2626;
+    background:linear-gradient(135deg, #dc2626, #b91c1c);
 }
 
 /* Professional card borders for video tiles */

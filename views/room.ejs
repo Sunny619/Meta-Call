@@ -16,12 +16,10 @@
         const PASS = "<%= passId %>"
         const camswitch = "<%= camId %>"
     </script>
-    <!-- <script>
-        
-    </script> -->
-
-    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="/socket.io/socket.io.js" defer></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
 
     <title>Meta-Call</title>
 </head>
@@ -34,9 +32,9 @@
 
             <!-- Floating control buttons -->
             <div id="call-buttons" class="float">
-                <button id="cam-button" class="float-button enabled-button" title="Toggle Camera">📷</button>
-                <button id="mute-button" class="float-button enabled-button" title="Toggle Mic">🎤</button>
-                <button id="end-button" class="float-button enabled-button" title="End Call">📞</button>
+                <button id="cam-button" class="float-button enabled-button" title="Toggle Camera"><i class="fas fa-video"></i></button>
+                <button id="mute-button" class="float-button enabled-button" title="Toggle Mic"><i class="fas fa-microphone"></i></button>
+                <button id="end-button" class="float-button enabled-button" title="End Call"><i class="fas fa-phone"></i></button>
             </div>
         </section>
 
@@ -47,9 +45,9 @@
             </div>
 
             <nav class="sidebar-tabs">
-                <button class="sidebar-tab active" data-tab="chat">💬 Chat</button>
-                <button class="sidebar-tab" data-tab="members">👥 Members</button>
-                <button class="sidebar-tab" data-tab="settings">⚙️ Settings</button>
+                <button class="sidebar-tab active" data-tab="chat"><i class="fas fa-comments"></i> Chat</button>
+                <button class="sidebar-tab" data-tab="members"><i class="fas fa-users"></i> Members</button>
+                <button class="sidebar-tab" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
             </nav>
 
             <div class="sidebar-content">

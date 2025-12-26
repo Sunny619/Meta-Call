@@ -294,8 +294,16 @@ function updatemembers() {
   membersDOM.innerHTML = members;
 }
 document.addEventListener("keypress", function (event) {
-  console.log(event.key)
-  if (event.key == "Enter" && document.getElementById("inputText")==document.activeElement) {
+  if (event.key === "Enter" && document.activeElement === inputText) {
+    event.preventDefault();
+    sendMsg();
+  }
+});
+
+// Also add direct listener to input field
+inputText.addEventListener("keypress", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
     sendMsg();
   }
 });

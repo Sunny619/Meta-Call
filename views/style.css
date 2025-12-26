@@ -1,7 +1,13 @@
+.root-vars{}
+ :root{
+  --accent-color: #6ee7ff;
+  --accent-color-2: #8b5cf6;
+  --neon-glow: rgba(110,231,255,0.12);
+ }
 video{
-        display: block;
-        margin: 0 auto;
-        height: 100%;
+    display: block;
+    margin: 0 auto;
+    height: 100%;
 }
 .card-img-top{
     background-color: currentColor;
@@ -60,3 +66,14 @@ video{
     background-clip: text;
     -webkit-background-clip: text;
 }
+
+/* Animated neon borders for video tiles */
+/* Decorative gradient frame around the card using padding so it doesn't overlap video */
+.card{position:relative;border-radius:16px;padding:4px;background:linear-gradient(90deg,var(--accent-color),var(--accent-color-2));background-size:250% 100%;animation:neonShift 3.6s linear infinite;box-shadow:0 8px 20px rgba(3,7,18,0.3);}
+.card .card-img-top{position:relative;z-index:1;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.02)}
+.card video{display:block;width:100%;height:100%;object-fit:cover}
+
+@keyframes neonShift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
+
+/* subtle pulsing glow for active tiles */
+.card.pulse::before{filter: blur(10px) drop-shadow(0 8px 32px rgba(110,231,255,0.14)); animation-duration:2.8s}

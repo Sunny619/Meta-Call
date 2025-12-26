@@ -60,7 +60,20 @@
     h1.title{font-family:'Nunito',sans-serif;font-size:48px;color:var(--accent);margin:0 0 8px;font-weight:900;letter-spacing:2px;text-transform:uppercase;animation:fadeInUp .8s ease .2s forwards;opacity:0;text-shadow:0 0 12px rgba(110,231,255,0.3)}
     
     /* brand logo */
-    .brand-logo{width:72px;height:72px;flex-shrink:0;animation:fadeInUp .8s ease .1s forwards;opacity:0}
+    .brand-logo{width:88px;height:88px;flex-shrink:0;display:block;animation:fadeInUp .8s ease .1s forwards, logoFloat 6s ease-in-out infinite;opacity:0;transform-origin:center center}
+    .brand-logo .ring{stroke-width:1.6;stroke-opacity:0.12}
+    .brand-logo .ring2{stroke-width:1.0;stroke-opacity:0.08}
+    .brand-logo .node{fill:var(--accent);filter:drop-shadow(0 6px 18px rgba(110,231,255,0.12))}
+    .brand-logo .node.outer{fill:var(--accent-2);opacity:0.95}
+    .brand-logo .connector{stroke:url(#sg);stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;fill:none;filter:drop-shadow(0 6px 14px rgba(110,231,255,0.06));stroke-opacity:0.98;vector-effect:non-scaling-stroke}
+    .brand-logo .connector-shadow{stroke:rgba(3,7,18,0.6);stroke-width:4;opacity:0.18;stroke-linecap:round;stroke-linejoin:round;fill:none;vector-effect:non-scaling-stroke}
+    @keyframes connectorDraw{from{stroke-dashoffset:120}to{stroke-dashoffset:0}}
+    .brand-logo .connector{stroke-dasharray:120;stroke-dashoffset:120;animation:connectorDraw 1.6s cubic-bezier(.2,.8,.2,1) forwards .18s}
+    @keyframes logoFloat{0%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(1.6deg)}100%{transform:translateY(0) rotate(0deg)}}
+    @keyframes nodePulse{0%{transform:scale(1);opacity:1}50%{transform:scale(1.12);opacity:0.92}100%{transform:scale(1);opacity:1}}
+    .brand-logo .node{transform-origin:60px 60px;animation:nodePulse 2.4s ease-in-out infinite}
+    @keyframes ringSpin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+    .brand-logo .rings{transform-origin:60px 60px;animation:ringSpin 28s linear infinite}
     
     p.lead{color:#c7e7ff88;font-size:16px;margin:0 0 18px;animation:fadeInUp .8s ease .4s forwards;opacity:0}
 
@@ -168,29 +181,41 @@
     <div class="panel">
       <div class="brand">
         <div style="display:flex;gap:16px;align-items:flex-start">
-          <!-- animated logo -->
-          <svg class="brand-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <!-- animated brand badge -->
+          <svg class="brand-logo" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <defs>
-              <style>
-                .logo-node{fill:url(#nodeg);animation:nodePulse 2s ease-in-out infinite}
-                .logo-line{stroke:rgba(110,231,255,0.4);stroke-width:1;animation:linePulse 2.4s ease-in-out infinite}
-                @keyframes nodePulse{0%{r:3}50%{r:4.2}100%{r:3}}
-                @keyframes linePulse{0%{opacity:0.3}50%{opacity:0.7}100%{opacity:0.3}}
-              </style>
-            <button type="button" class="btn-neon" onclick="join()">Create / Join</button>
+              <radialGradient id="lg" cx="50%" cy="40%">
+                <stop offset="0%" stop-color="#9ef1ff" stop-opacity="0.95"/>
+                <stop offset="60%" stop-color="#6ee7ff" stop-opacity="0.7"/>
+                <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.5"/>
+              </radialGradient>
+              <linearGradient id="sg" x1="0" x2="1">
+                <stop offset="0%" stop-color="#6ee7ff" stop-opacity="0.9"/>
+                <stop offset="100%" stop-color="#8b5cf6" stop-opacity="0.9"/>
+              </linearGradient>
+              <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+                <feGaussianBlur stdDeviation="6" result="b" />
+                <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
             </defs>
-            <!-- central node -->
-            <circle class="logo-node" cx="50" cy="50" r="3"/>
-            <!-- outer nodes -->
-            <circle class="logo-node" cx="50" cy="20" r="3" style="animation-delay:0.2s"/>
-            <circle class="logo-node" cx="80" cy="50" r="3" style="animation-delay:0.4s"/>
-            <circle class="logo-node" cx="50" cy="80" r="3" style="animation-delay:0.6s"/>
-            <circle class="logo-node" cx="20" cy="50" r="3" style="animation-delay:0.8s"/>
-            <!-- connecting lines -->
-            <line class="logo-line" x1="50" y1="50" x2="50" y2="20"/>
-            <line class="logo-line" x1="50" y1="50" x2="80" y2="50"/>
-            <line class="logo-line" x1="50" y1="50" x2="50" y2="80"/>
-            <line class="logo-line" x1="50" y1="50" x2="20" y2="50"/>
+            <g class="rings" transform="translate(0,0)">
+              <g transform="translate(60,60)">
+                <circle class="ring" r="36" fill="none" stroke="url(#sg)"/>
+                <circle class="ring2" r="24" fill="none" stroke="url(#lg)"/>
+              </g>
+            </g>
+            <!-- connections group: JS will populate pairwise connectors between outer nodes to depict peer-to-peer mesh -->
+            <g id="connections" transform="translate(60,60)"></g>
+            <g class="nodes" transform="translate(60,60)">
+              <circle id="nodeCenter" class="node center" cx="0" cy="0" r="6" fill="url(#lg)" filter="url(#glow)"/>
+              <circle id="nodeUp" class="node outer" cx="0" cy="-36" r="3.6" fill="#6ee7ff"/>
+              <circle id="nodeRight" class="node outer" cx="36" cy="0" r="3.6" fill="#8b5cf6"/>
+              <circle id="nodeDown" class="node outer" cx="0" cy="36" r="3.6" fill="#6ee7ff"/>
+              <circle id="nodeLeft" class="node outer" cx="-36" cy="0" r="3.6" fill="#8b5cf6"/>
+            </g>
+            <g transform="translate(0,0)">
+              <circle cx="60" cy="60" r="56" fill="none" stroke="rgba(255,255,255,0.02)"/>
+            </g>
           </svg>
           <!-- brand text -->
           <div>
@@ -289,6 +314,81 @@
           inp.addEventListener('focus', ()=> inp.closest('.mb-3') && inp.closest('.mb-3').classList.add('focused'));
           inp.addEventListener('blur', ()=> inp.closest('.mb-3') && inp.closest('.mb-3').classList.remove('focused'));
         });
+      })();
+    </script>
+    <script>
+      // Animate brand-logo nodes and build a peer-to-peer mesh between outer nodes
+      (function(){
+        const svg = document.querySelector('.brand-logo');
+        if(!svg) return;
+
+        const nodes = {
+          center: document.getElementById('nodeCenter'),
+          up: document.getElementById('nodeUp'),
+          right: document.getElementById('nodeRight'),
+          down: document.getElementById('nodeDown'),
+          left: document.getElementById('nodeLeft')
+        };
+
+        const connectionsGroup = document.getElementById('connections');
+        const outers = [nodes.up, nodes.right, nodes.down, nodes.left];
+
+        // create connector elements for each pair of outer nodes (i<j)
+        const pairs = [];
+        for(let i=0;i<outers.length;i++){
+          for(let j=i+1;j<outers.length;j++){
+            const lineShadow = document.createElementNS('http://www.w3.org/2000/svg','line');
+            lineShadow.setAttribute('class','connector-shadow');
+            const lineMain = document.createElementNS('http://www.w3.org/2000/svg','line');
+            lineMain.setAttribute('class','connector');
+            connectionsGroup.appendChild(lineShadow);
+            connectionsGroup.appendChild(lineMain);
+            pairs.push({a:i,b:j,shadow:lineShadow,main:lineMain});
+          }
+        }
+
+        const base = {r:36};
+        let t = 0;
+
+        function update(){
+          t += 0.016;
+          // oscillating offsets for a natural, independent movement
+          const upPos = {x: Math.sin(t*1.2)*4 + 0, y: -base.r + Math.cos(t*1.6)*4};
+          const rightPos = {x: base.r + Math.cos(t*1.1)*4, y: Math.sin(t*1.3)*4 + 0};
+          const downPos = {x: Math.sin(t*1.4)*4 + 0, y: base.r + Math.cos(t*0.9)*4};
+          const leftPos = {x: -base.r + Math.cos(t*1.05)*4, y: Math.sin(t*0.95)*4 + 0};
+
+          const posArr = [upPos, rightPos, downPos, leftPos];
+
+          // update node positions
+          for(let k=0;k<outers.length;k++){
+            const el = outers[k];
+            const p = posArr[k];
+            el.setAttribute('cx', p.x);
+            el.setAttribute('cy', p.y);
+          }
+
+          // update pairwise connectors so lines always attach to node centers
+          for(const pr of pairs){
+            const a = posArr[pr.a];
+            const b = posArr[pr.b];
+            // shadow slightly offset for depth
+            pr.shadow.setAttribute('x1', a.x); pr.shadow.setAttribute('y1', a.y);
+            pr.shadow.setAttribute('x2', b.x + (b.x-a.x)*0.02); pr.shadow.setAttribute('y2', b.y + (b.y-a.y)*0.02);
+
+            pr.main.setAttribute('x1', a.x); pr.main.setAttribute('y1', a.y);
+            pr.main.setAttribute('x2', b.x); pr.main.setAttribute('y2', b.y);
+
+            // optional: adapt opacity by distance (closer -> brighter)
+            const dx = a.x-b.x, dy = a.y-b.y; const d = Math.hypot(dx,dy);
+            const opacity = 1 - Math.min(1, (d-20)/80);
+            pr.main.style.opacity = (0.22 * opacity).toFixed(3);
+            pr.shadow.style.opacity = (0.12 * opacity * 0.9).toFixed(3);
+          }
+
+          requestAnimationFrame(update);
+        }
+        requestAnimationFrame(update);
       })();
     </script>
     <script>

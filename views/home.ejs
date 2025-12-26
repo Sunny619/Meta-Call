@@ -4,154 +4,348 @@
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link rel="icon" type="image/png" href="favicon.png">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Meta-Call</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><radialGradient id='g'><stop offset='0%' stop-color='%236ee7ff'/><stop offset='100%' stop-color='%238b5cf6'/></radialGradient></defs><rect fill='%230b1020' width='100' height='100'/><circle cx='50' cy='50' r='3' fill='url(%23g)'/><circle cx='50' cy='25' r='2.5' fill='url(%23g)' opacity='0.8'/><circle cx='75' cy='50' r='2.5' fill='url(%23g)' opacity='0.8'/><circle cx='50' cy='75' r='2.5' fill='url(%23g)' opacity='0.8'/><circle cx='25' cy='50' r='2.5' fill='url(%23g)' opacity='0.8'/><line x1='50' y1='50' x2='50' y2='25' stroke='%236ee7ff' stroke-width='1' opacity='0.5'/><line x1='50' y1='50' x2='75' y2='50' stroke='%236ee7ff' stroke-width='1' opacity='0.5'/><line x1='50' y1='50' x2='50' y2='75' stroke='%236ee7ff' stroke-width='1' opacity='0.5'/><line x1='50' y1='50' x2='25' y2='50' stroke='%236ee7ff' stroke-width='1' opacity='0.5'/></svg>">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@900&family=Poppins:wght@400;500;700;900&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@900&display=swap');
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700;900&display=swap');
-    body {
-      font-family: "Poppins", sans-serif;
-      background: linear-gradient(-45deg, #7200ca, #962fbf, #355de0,#1E90FF);
-      background-size: 400% 400%;
-      animation: gradient 10s ease infinite;
+    :root{
+      --bg1:#0b1020;
+      --accent:#6ee7ff;
+      --accent-2:#8b5cf6;
+      --glass: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.08);
     }
-    @keyframes gradient {
-      0% {
-        background-position: 0% 50%;
-      }
-      50% {
-        background-position: 100% 50%;
-      }
-      100% {
-        background-position: 0% 50%;
-      }
+    html,body{height:100%;margin:0}
+    body{
+      font-family: 'Poppins', sans-serif;
+      background: radial-gradient(ellipse at center, rgba(139,92,246,0.08) 0%, transparent 40%),
+                  linear-gradient(180deg,#02030b 0%, #071029 60%);
+      color:#dbeafe;
+      overflow:hidden;
     }
+
+    /* animated starfield */
+    .scene::before{
+      content:'';position:fixed;inset:0;background-image:radial-gradient(#6ee7ff22 0.8px, transparent 0),radial-gradient(#8b5cf622 0.6px, transparent 0);
+      background-size: 1200px 1200px, 800px 800px;opacity:0.6;mix-blend-mode:screen;animation: drift 40s linear infinite;
+      z-index:0;
+    }
+    @keyframes drift{from{transform:translateY(0)}to{transform:translateY(-300px)}}
+
+    /* neon grid */
+    .scene::after{
+      content:'';position:fixed;left:0;right:0;bottom:-20vh;height:60vh;background:
+        linear-gradient(180deg, transparent, rgba(139,92,246,0.06)),
+        repeating-linear-gradient(0deg, rgba(255,255,255,0.03) 0 1px, transparent 1px 40px),
+        repeating-linear-gradient(90deg, rgba(110,231,255,0.03) 0 1px, transparent 1px 40px);
+      transform:perspective(500px) rotateX(75deg);filter:blur(8px);opacity:0.7;z-index:0;
+    }
+
+    #net-canvas{position:fixed;inset:0;z-index:1;pointer-events:none}
+    .wrap{position:relative;z-index:3;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px}
+
+    .panel{
+      width:980px;max-width:96%;display:grid;grid-template-columns:1fr 420px;gap:28px;align-items:center;
+    }
+
+    .brand{
+      padding:28px;border-radius:16px;background:linear-gradient(135deg, rgba(255,255,255,0.02), transparent);
+      border:1px solid var(--glass-border);backdrop-filter: blur(6px);
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    }
+
+    h1.title{font-family:'Nunito',sans-serif;font-size:48px;color:var(--accent);margin:0 0 8px;font-weight:900;letter-spacing:2px;text-transform:uppercase;animation:fadeInUp .8s ease .2s forwards;opacity:0;text-shadow:0 0 12px rgba(110,231,255,0.3)}
     
-    h1 {
-      font-family: 'Nunito', sans-serif;
-      font-size: 48px;
-      text-align: center;
-      margin-top: 50px;
-      margin-bottom: 20px;
+    /* brand logo */
+    .brand-logo{width:72px;height:72px;flex-shrink:0;animation:fadeInUp .8s ease .1s forwards;opacity:0}
+    
+    p.lead{color:#c7e7ff88;font-size:16px;margin:0 0 18px;animation:fadeInUp .8s ease .4s forwards;opacity:0}
+
+    .avatar-orb{width:220px;height:220px;border-radius:50%;background:conic-gradient(from 90deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;box-shadow:0 8px 32px rgba(139,92,246,0.18), inset 0 2px 20px rgba(255,255,255,0.06);
+      margin-top:12px;transform-origin:center;animation: orb-rotate 9s linear infinite, floaty 4s ease-in-out infinite}
+    .avatar-orb:hover{transform:scale(1.04)}
+    .avatar-orb .face{width:120px;height:120px;background:linear-gradient(180deg,#ffffff22,#ffffff08);border-radius:50%;
+      display:flex;align-items:center;justify-content:center;color:#001; font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,0.4);transition:transform .28s ease}
+    .avatar-orb .face.pulse{animation: face-pulse 2s infinite}
+
+    /* form card (glass) */
+    .card-glass{
+      padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid var(--glass-border);backdrop-filter: blur(8px);box-shadow: 0 12px 40px rgba(3,7,18,0.6);
+      transform:translateY(8px);opacity:0;animation: fadeInUp .8s ease .18s forwards
     }
 
-    label {
-      font-size: 18px;
-      font-weight: bold;
-      margin-bottom: 5px;
+    label{display:block;font-size:13px;color:#a5d8ff;margin-bottom:6px}
+    input[type=text], select{width:100%;padding:12px;border-radius:10px;border:none;background:rgba(255,255,255,0.02);color:#e6f7ff;outline:none}
+    .form-text{font-size:12px;color:#9fb9d6;margin-top:6px}
+
+    .btn-neon{display:inline-block;padding:12px 22px;border-radius:10px;border:none;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#021024;font-weight:700;cursor:pointer;position:relative;overflow:visible}
+    .btn-neon::after{content:'';position:absolute;left:-8px;right:-8px;top:-8px;bottom:-8px;border-radius:14px;background:conic-gradient(from 90deg,var(--accent),var(--accent-2));opacity:0;filter:blur(18px);transition:opacity .25s}
+    .btn-neon:hover::after{opacity:0.28}
+    .btn-neon:hover{transform:translateY(-3px)}
+
+    /* small animations */
+    @keyframes orb-rotate{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+    @keyframes floaty{0%{transform:translateY(0)}50%{transform:translateY(-8px)}100%{transform:translateY(0)}}
+    @keyframes face-pulse{0%{transform:scale(1)}50%{transform:scale(1.06)}100%{transform:scale(1)}}
+    @keyframes fadeInUp{0%{opacity:0;transform:translateY(18px)}100%{opacity:1;transform:translateY(0)}}
+
+    .download-api{margin-top:14px}
+
+    @media (max-width:900px){
+      .panel{grid-template-columns:1fr;}
+      .avatar-orb{margin:22px auto}
     }
+    /* metaverse background SVG and holo panels */
+    .meta-bg{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.9}
+    .meta-bg svg{width:100%;height:100%;display:block}
+    .holo-panel{position:absolute;right:6%;top:18%;width:260px;height:160px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(110,231,255,0.06);backdrop-filter:blur(8px);transform:translateY(0);animation: floaty 6s ease-in-out infinite}
+    .holo-panel.two{left:6%;right:auto;top:38%;width:320px;height:180px;animation-duration:8s}
 
-    input {
-      font-size: 18px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-      margin-bottom: 20px;
-    }
+    /* fancy avatar card */
+    /* avatar removed - styles cleared */
+    /* extra background layers */
+    .scene{
+      position:fixed;inset:0;z-index:0;pointer-events:none}
+    .bg-layer--sweep{position:fixed;inset:-20% -40% auto -40%;height:80vh;background:radial-gradient(closest-side, rgba(139,92,246,0.12), transparent 40%);
+      transform-origin:center;filter:blur(40px);opacity:0.9;animation:sweep 18s linear infinite}
+    .bg-layer--sweep.two{left:auto;right:-40%;background:radial-gradient(closest-side, rgba(110,231,255,0.08), transparent 40%);animation-duration:26s}
 
-    select {
-      font-size: 18px;
-      padding: 10px;
-      border: none;
-      border-radius: 5px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-      margin-bottom: 20px;
-    }
+    @keyframes sweep{0%{transform:rotate(0deg) translateX(0)}50%{transform:rotate(12deg) translateX(6%)}100%{transform:rotate(0deg) translateX(0)}}
 
-    button {
-      font-size: 24px;
-      font-weight: bold;
-      background-color: #007bff;
-      color: #ffffff;
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
+    /* subtle rings */
+    .ring{
+      position:absolute;left:50%;top:46%;width:60vw;height:60vw;max-width:1200px;max-height:1200px;transform:translate(-50%,-50%);
+      border-radius:50%;border:1px solid rgba(110,231,255,0.03);box-shadow:0 0 120px rgba(139,92,246,0.03) inset;pointer-events:none;opacity:0.6;animation:ringPulse 14s linear infinite}
+    .ring.thin{width:40vw;height:40vw;border:1px dashed rgba(110,231,255,0.02);animation-duration:20s}
+    @keyframes ringPulse{0%{transform:translate(-50%,-50%) scale(0.98)}50%{transform:translate(-50%,-50%) scale(1.02)}100%{transform:translate(-50%,-50%) scale(0.98)}}
 
-    button:hover {
-      background-color: #0062cc;
-    }
+    /* input focus animations + floating labels via :focus-within */
+    .mb-3{position:relative}
+    .mb-3 label{transition:transform .22s ease,color .22s ease,opacity .22s}
+    .mb-3:focus-within label{transform:translateY(-10px) scale(0.92);color:var(--accent);opacity:0.95}
+    input[type=text], select{transition:box-shadow .22s ease, transform .18s; caret-color:var(--accent)}
+    input[type=text]:focus, select:focus{box-shadow:0 8px 30px rgba(110,231,255,0.06), 0 0 30px rgba(139,92,246,0.04) ;transform:translateY(-2px)}
+    input::placeholder{color:#9fb9d6aa;transition:opacity .2s}
+    .mb-3:focus-within input::placeholder{opacity:0.45}
 
-    .form-text {
-      font-size: 14px;
-      color: #6c757d;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: auto;
-      padding: 30px;
-      box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.2);
-      border-radius: 10px;
-      background-color: #ffffff;
-    }
-    .download-api {
-  flex-basis: 48%;
-}
-
-.download-api {
-  text-align: center;
-  font-size: 24px;
-}
-
-@media (max-width: 768px) {
-  .input-fields,
-  .download-api {
-    flex-basis: 100%;
-  }
-}
+    /* (removed custom cursor) */
   </style>
 </head>
 
 <body>
-  <br><br>
-  <div class="container">
-    <h1>Meta-Call</h1>
-      <p>
-      Enjoy the new way of Videocalling by using avatars instead of using your Face.
-      Choose from our wide range of avatars and interact move with the people you love
-    </p>
-    <form action="/room" method="post">
-      <div class="mb-3">
-        <label for="username">Name</label>
-        <input type="text" name="username">
+  <div class="scene"></div>
+  <div class="bg-layer--sweep"></div>
+  <div class="bg-layer--sweep two"></div>
+  <div class="ring"></div>
+  <div class="ring thin"></div>
+  <div class="meta-bg" aria-hidden="true">
+    <!-- lightweight SVG metaverse skyline + wireframe mesh -->
+    <svg viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7ff" stop-opacity="0.06"/><stop offset="1" stop-color="#8b5cf6" stop-opacity="0.04"/></linearGradient>
+        <linearGradient id="g2" x1="0" x2="1"><stop offset="0" stop-color="#8b5cf6" stop-opacity="0.04"/><stop offset="1" stop-color="#6ee7ff" stop-opacity="0.02"/></linearGradient>
+      </defs>
+      <!-- subtle mesh -->
+      <g fill="none" stroke="url(#g1)" stroke-width="1" opacity="0.7">
+        <path d="M0,700 C200,640 400,740 600,700 C800,660 1000,740 1200,700 C1400,660 1600,740 1800,700"/>
+        <path d="M0,760 C240,700 480,780 720,740 C960,700 1200,780 1440,740 C1680,700 1920,780 2160,740"/>
+      </g>
+      <!-- floating holo panels -->
+      <g opacity="0.9">
+        <rect x="1180" y="120" width="240" height="140" rx="12" fill="url(#g2)"/>
+        <rect x="60" y="340" width="320" height="180" rx="12" fill="url(#g1)"/>
+      </g>
+    </svg>
+  </div>
+    <canvas id="net-canvas" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div id="particles" aria-hidden="true"></div>
+    <div class="panel">
+      <div class="brand">
+        <div style="display:flex;gap:16px;align-items:flex-start">
+          <!-- animated logo -->
+          <svg class="brand-logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <defs>
+              <style>
+                .logo-node{fill:url(#nodeg);animation:nodePulse 2s ease-in-out infinite}
+                .logo-line{stroke:rgba(110,231,255,0.4);stroke-width:1;animation:linePulse 2.4s ease-in-out infinite}
+                @keyframes nodePulse{0%{r:3}50%{r:4.2}100%{r:3}}
+                @keyframes linePulse{0%{opacity:0.3}50%{opacity:0.7}100%{opacity:0.3}}
+              </style>
+              <radialGradient id="nodeg"><stop offset="0%" stop-color="#6ee7ff"/><stop offset="100%" stop-color="#8b5cf6"/></radialGradient>
+            </defs>
+            <!-- central node -->
+            <circle class="logo-node" cx="50" cy="50" r="3"/>
+            <!-- outer nodes -->
+            <circle class="logo-node" cx="50" cy="20" r="3" style="animation-delay:0.2s"/>
+            <circle class="logo-node" cx="80" cy="50" r="3" style="animation-delay:0.4s"/>
+            <circle class="logo-node" cx="50" cy="80" r="3" style="animation-delay:0.6s"/>
+            <circle class="logo-node" cx="20" cy="50" r="3" style="animation-delay:0.8s"/>
+            <!-- connecting lines -->
+            <line class="logo-line" x1="50" y1="50" x2="50" y2="20"/>
+            <line class="logo-line" x1="50" y1="50" x2="80" y2="50"/>
+            <line class="logo-line" x1="50" y1="50" x2="50" y2="80"/>
+            <line class="logo-line" x1="50" y1="50" x2="20" y2="50"/>
+          </svg>
+          <!-- brand text -->
+          <div>
+            <h1 class="title">Meta-Call</h1>
+            <p class="lead">Step into a new kind of video call — avatars, shared spaces, and low-friction presence. Choose an avatar and teleport into a room.</p>
+          </div>
+        </div>
+
+        <div style="display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+          <!-- avatar removed as requested; space reserved for meta description -->
+          <div style="flex:1;min-width:160px">
+            <div style="color:#9fb9d6;font-size:12px">Featured</div>
+            <div style="font-weight:700;color:#dbeafe">Neon Metahub</div>
+            <div style="margin-top:8px;font-size:13px;color:#bcdff9">Low-latency avatar streaming · Spatial audio ready</div>
+          </div>
+        </div>
       </div>
-      <div class="mb-3">
-        <label for="roomcode">Room Code</label>
-        <input type="text" name="roomcode">
+
+      <div class="card-glass">
+        <form>
+          <div class="mb-3">
+            <label for="username">Name</label>
+            <input type="text" id="username" placeholder="Enter your avatar name">
+          </div>
+          <div class="mb-3">
+            <label for="roomcode">Room Code</label>
+            <input type="text" id="roomcode" placeholder="e.g. NEON-1234">
+          </div>
+          <div class="mb-3">
+            <label for="password">Password</label>
+            <input type="text" id="password" placeholder="optional">
+            <div class="form-text">Leave this blank if you don't want to set a password</div>
+          </div>
+          <div class="mb-3">
+            <label>Camera</label>
+            <select id="cam">
+              <option value="0">Normal Camera</option>
+              <option value="1">Meta Camera</option>
+            </select>
+          </div>
+          <div style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+            <button type="button" class="btn-neon" onclick="join()">Create / Join</button>
+            <div class="download-api">
+              <div style="font-size:12px;color:#9fb9d6">Need the local API?</div>
+              <a class="btn btn-sm btn-outline-light" href="https://github.com/Beyonder22/MetaV3/archive/refs/heads/main.zip" download>Download</a>
+            </div>
+          </div>
+        </form>
       </div>
-      <div class="mb-3">
-        <label for="password">Password</label>
-        <input type="password" name="password">
-        <div class="form-text">Leave this blank, if you don't want to set a password</div>
-      </div>
-      <div class="mb-3">
-        <label>Camera</label>
-        <select name="cam">
-          <option value="0">Normal Camera</option>
-          <option value="1">Meta Camera</option>
-        </select>
-      </div>
-      <div style="text-align:center">
-        <button type="submit">Create/Join</button>
-      </div>
-    </form>
-    <div class="download-api mb-3" style="display: ruby;">
-      <p>To use Meta-Call, download the API below:</p>
-      <a type="button" class="btn btn-primary" href="https://github.com/Beyonder22/MetaV3/archive/refs/heads/main.zip" download>Download API</a>
     </div>
   </div>
+    <script src="home.js" defer></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
+      integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"></script>
+    <script>
+      // small particle generator for background atmosphere
+      (function(){
+        const container = document.getElementById('particles');
+        if(!container) return;
+        container.style.position='fixed';container.style.inset='0';container.style.pointerEvents='none';container.style.zIndex='1';
+        function make(){
+          const el = document.createElement('div');
+          const size = Math.random()*12+4; // larger particles
+          el.style.position='absolute';
+          el.style.left = Math.random()*100 + '%';
+          el.style.bottom = (Math.random()*8 - 6) + '%'; // slightly varied start
+          el.style.width = size+'px';
+          el.style.height = size+'px';
+          el.style.borderRadius = '50%';
+          el.style.background = Math.random()>0.5 ? 'rgba(110,231,255,0.22)' : 'rgba(139,92,246,0.2)';
+          el.style.boxShadow = '0 6px 24px rgba(110,231,255,0.08)';
+          el.style.filter='blur(3px)';
+          el.style.opacity = '0.02';
+          container.appendChild(el);
+          // animate
+          const dur = 8000 + Math.random()*9000;
+          el.animate([
+            {transform:'translateY(0) scale(0.6)', opacity:0.05},
+            {transform:'translateY(-110vh) scale(1)', opacity:0.9},
+            {transform:'translateY(-160vh) scale(1.1)', opacity:0}
+          ],{duration:dur, easing:'cubic-bezier(.2,.8,.2,1)'}).onfinish = ()=> el.remove();
+        }
+        // spawn a few more per second for prominence
+        setInterval(()=>{ if(Math.random()<0.98) make()}, 180);
+      })();
 
-  <script src="https://code.jquery.com/jquery-3.6.4.slim.min.js"
-    integrity="sha256-a2yjHM4jnF9f54xUQakjZGaqYs/V1CYvWpoqZzC2/Bw=" crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
-    crossorigin="anonymous"></script>
+      // (avatar removed) no visor pulse
+
+      // input focus behavior (no custom cursor)
+      (function(){
+        // add focus/blur classes for styling and accessibility
+        document.querySelectorAll('.mb-3 input, .mb-3 select').forEach(inp=>{
+          inp.addEventListener('focus', ()=> inp.closest('.mb-3') && inp.closest('.mb-3').classList.add('focused'));
+          inp.addEventListener('blur', ()=> inp.closest('.mb-3') && inp.closest('.mb-3').classList.remove('focused'));
+        });
+      })();
+    </script>
+    <script>
+      // network canvas: animated nodes + connecting lines (metaverse connections)
+      (function(){
+        const canvas = document.getElementById('net-canvas');
+        if(!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let w = canvas.width = window.innerWidth;
+        let h = canvas.height = window.innerHeight;
+        const nodes = [];
+        const NODE_COUNT = Math.max(12, Math.round((w*h)/120000));
+        function rand(min,max){return Math.random()*(max-min)+min}
+        for(let i=0;i<NODE_COUNT;i++){
+          nodes.push({x:rand(0,w), y:rand(0,h), vx:rand(-0.3,0.3), vy:rand(-0.3,0.3), r:rand(1.6,3.6)});
+        }
+        function resize(){ w = canvas.width = window.innerWidth; h = canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resize);
+        function draw(){
+          ctx.clearRect(0,0,w,h);
+          // subtle gradient background overlay
+          const g = ctx.createLinearGradient(0,0,w,h);
+          g.addColorStop(0,'rgba(11,16,32,0.02)'); g.addColorStop(1,'rgba(14,22,48,0.04)');
+          ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+
+          // update nodes
+          for(let i=0;i<nodes.length;i++){
+            const n = nodes[i];
+            n.x += n.vx; n.y += n.vy;
+            if(n.x<0||n.x>w) n.vx *= -1; if(n.y<0||n.y>h) n.vy *= -1;
+          }
+
+          // draw connections between nearby nodes
+          for(let i=0;i<nodes.length;i++){
+            const a = nodes[i];
+            for(let j=i+1;j<nodes.length;j++){
+              const b = nodes[j];
+              const dx = a.x-b.x, dy = a.y-b.y; const d = Math.hypot(dx,dy);
+              if(d<160){
+                const alpha = 1 - (d/160);
+                ctx.strokeStyle = `rgba(110,231,255,${0.14*alpha})`;
+                ctx.lineWidth = 1*Math.min(1, alpha*1.6);
+                ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+              }
+            }
+          }
+
+          // draw nodes
+          for(const n of nodes){
+            ctx.fillStyle = 'rgba(110,231,255,0.9)';
+            ctx.beginPath(); ctx.arc(n.x,n.y,n.r,0,Math.PI*2); ctx.fill();
+          }
+          requestAnimationFrame(draw);
+        }
+        draw();
+      })();
+    </script>
 </body>
 
 </html>

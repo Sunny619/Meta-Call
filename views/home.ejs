@@ -39,7 +39,7 @@
     /* Layer 1: Hexagonal Data Grid Pattern */
     body::before {
         content: ""; position: fixed; inset: 0; z-index: -3;
-        opacity: 0.4;
+        opacity: 0.6;
         background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 0l25.98 15v30L30 60 4.02 45V15z' fill-opacity='0' stroke='%236366f1' stroke-width='0.5' stroke-opacity='0.15'/%3E%3C/svg%3E");
         mask-image: radial-gradient(circle at center, black 40%, transparent 100%); /* Fade out towards edges */
     }
@@ -370,10 +370,10 @@
         let w = canvas.width = window.innerWidth;
         let h = canvas.height = window.innerHeight;
         const nodes = [];
-        const NODE_COUNT = Math.max(15, Math.round((w*h)/120000));
+        const NODE_COUNT = Math.max(100, Math.round((w*h)/100000));
         function rand(min,max){return Math.random()*(max-min)+min}
         // Define cyberpunk palette for the mesh
-        const nodeColors = ['rgba(6, 182, 212, 0.5)', 'rgba(59, 130, 246, 0.5)', 'rgba(139, 92, 246, 0.5)'];
+        const nodeColors = ['rgba(6, 182, 212, 0.8)', 'rgba(59, 130, 246, 0.8)', 'rgba(139, 92, 246, 0.8)'];
 
         for(let i=0;i<NODE_COUNT;i++){
           nodes.push({
@@ -400,7 +400,7 @@
               if(d<180){
                 const alpha = 1 - (d/180);
                 // Vibrant connecting lines
-                ctx.strokeStyle = `rgba(99, 102, 241, ${0.2*alpha})`;
+                ctx.strokeStyle = `rgba(99, 102, 241, ${0.4*alpha})`;
                 ctx.lineWidth = 1;
                 ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
               }

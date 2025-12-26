@@ -322,12 +322,12 @@ video{
     transform:scale(0.95);
 }
 
-.enabled-button{
-    background:linear-gradient(135deg, #10b981, #059669);
+.enabled-button {
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
 }
 
-.enabled-button:hover{
-    background:linear-gradient(135deg, #059669, #047857);
+.enabled-button:hover {
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
 }
 
 .disabled-button{

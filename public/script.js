@@ -7,7 +7,7 @@ const inputText = document.getElementById('inputText')
 const videoButton = document.getElementById('cam-button')
 const muteButton = document.getElementById('mute-button')
 const endButton = document.getElementById('end-button')
-var chat = document.getElementById("message-container");
+const messagesArea = document.querySelector('.messages-area');
 
 //Class Declarations
 class User {
@@ -197,16 +197,24 @@ function handleCall(call) {
   })
 }
 function sendMsg() {
-  const msg ="<b>"+ NAME +"</b>"  + ": " + inputText.value
+  if (!inputText.value.trim()) return; // don't send empty messages
+  const msg = `<b>${NAME}</b>: ${inputText.value}`
   for (let i = 0; i < connections.length; i++) {
     connections[i].send(msg);
   }
   addMessageInChat(msg);
-  //Fixes multiple connection issue
+  inputText.value = ''; // clear input after sending
 }
 
 function addMessageInChat(data) {
-  chatMessages.innerHTML += `<li class="list-group-item" style="z-index: -1;">` + data + "</li>"
+  const li = document.createElement('li');
+  li.className = 'list-group-item';
+  li.innerHTML = data;
+  chatMessages.appendChild(li);
+  // auto-scroll to latest message
+  if (messagesArea) {
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  }
 }
 
 videoButton.addEventListener('click', () => {
@@ -233,9 +241,13 @@ endButton.addEventListener('click', () => {
   endButton.className = "float-button disabled-button"
   window.location.href = '/home'
 });
-chat.addEventListener('DOMNodeInserted', () => {
-  chat.scrollTop = chat.scrollHeight;
-})
+
+// auto-scroll chat when new messages arrive
+if (messagesArea) {
+  messagesArea.addEventListener('DOMNodeInserted', () => {
+    messagesArea.scrollTop = messagesArea.scrollHeight;
+  });
+}
 
 function updateNameArgs(name, pid) {
   //console.log(NAME)
@@ -272,9 +284,10 @@ function mapUser(peerId, video) {
 function updatemembers() {
   console.log("members:")
   var membersDOM = document.getElementById("nav-members");
+  if (!membersDOM) return; // guard against missing element
   var members = `<ul class="list-group">`;
   users.forEach((value, key) => {
-    members += `<li class="list-group-item" style="z-index: -1;"><div>Name: ${value.name}</div><div>PeerID: ${key}</div></li>`;
+    members += `<li class="list-group-item"><div>Name: ${value.name}</div><div>PeerID: ${key}</div></li>`;
     console.log(value.name);
   })
   members += `</ul>`;

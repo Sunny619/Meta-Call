@@ -16,100 +16,76 @@
         const PASS = "<%= passId %>"
         const camswitch = "<%= camId %>"
     </script>
-    <!-- <script>
-        
-    </script> -->
-
-    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="/socket.io/socket.io.js" defer></script>
+    <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js" defer></script>
 
     <title>Meta-Call</title>
 </head>
 
 <body>
-    <div id="main" class="row" style="margin-right: 0px">
-        <div id="call-buttons" class="float">
-            <button id="cam-button" class="float-button enabled-button">
-                <font size="6"> 📷</font>
-            </button>
-            <button id="mute-button" class="float-button enabled-button">
-                <font size="6">🎤</font>
-            </button>
-            <button id="end-button" class="float-button enabled-button">
-                <font size="6">📞</font>
-            </button>
-        </div>
+    <div id="main" class="call-layout">
+        <!-- Video grid section -->
+        <section class="video-section">
+            <div id="video-grid" class="grid1"></div>
 
-        <div class="col-10" style="padding-right: 0px;">
-            <div id="video-grid">
+            <!-- Floating control buttons -->
+            <div id="call-buttons" class="float">
+                <button id="cam-button" class="float-button enabled-button" title="Toggle Camera"><i class="fas fa-video"></i></button>
+                <button id="mute-button" class="float-button enabled-button" title="Toggle Mic"><i class="fas fa-microphone"></i></button>
+                <button id="end-button" class="float-button enabled-button" title="End Call"><i class="fas fa-phone"></i></button>
+            </div>
+        </section>
 
+        <!-- Right sidebar: chat, members, settings -->
+        <aside class="sidebar-panel">
+            <div class="sidebar-header">
+                <h2>Room Controls</h2>
             </div>
 
-        </div>
-        <div class="col-2" style="height: 100vh; padding: 0px;">
-            <div style="display:flex; flex-direction: column; height: 100%; padding: 0px;">
-                <nav>
-                    <div class="nav nav-tabs" id="nav-tab" role="tablist">
-                        <button class="nav-link active" id="nav-chat-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-chat" type="button" role="tab" aria-controls="nav-chat"
-                            aria-selected="true">Chat</button>
-                            <button class="nav-link" id="nav-members-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-members" type="button" role="tab" aria-controls="nav-members"
-                            aria-selected="false">Members</button>
-                        <button class="nav-link" id="nav-settings-tab" data-bs-toggle="tab"
-                            data-bs-target="#nav-settings" type="button" role="tab" aria-controls="nav-settings"
-                            aria-selected="false">Settings</button>
+            <nav class="sidebar-tabs">
+                <button class="sidebar-tab active" data-tab="chat"><i class="fas fa-comments"></i> Chat</button>
+                <button class="sidebar-tab" data-tab="members"><i class="fas fa-users"></i> Members</button>
+                <button class="sidebar-tab" data-tab="settings"><i class="fas fa-cog"></i> Settings</button>
+            </nav>
 
-                </nav>
-                <div class="tab-content" id="nav-tabContent" style="display:flex; height: 100%; overflow: auto">
-                    <div class="tab-pane fade show active" id="nav-chat" role="tabpanel" aria-labelledby="nav-chat-tab"
-                        style="width:100%">
-                        <div class="container"
-                            style="display:flex; flex-direction: column; height: 100%; padding: 0px;">
-                            <div id="message-container"
-                                style="align-self:start;flex: auto;width: 100%; padding: 0px; padding-left: 2px; overflow: auto;">
-                                <div>
-                                    <ul class="list-group" id="messages">
+            <div class="sidebar-content">
+                <!-- Chat Tab -->
+                <div class="tab-panel active" id="chat-panel">
+                    <div class="messages-area">
+                        <ul class="list-group" id="messages"></ul>
+                    </div>
+                    <div class="chat-input-wrap">
+                        <input type="text" id="inputText" class="chat-input-field" placeholder="Type a message...">
+                        <button class="chat-send-btn" onclick="sendMsg()">Send</button>
+                    </div>
+                </div>
 
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="chat-input"
-                                style="align-self:end; width: 100%; display:flex; gap:2px; padding:2px;">
-                                <input type="text" id="inputText" style="flex: auto; ">
-                                <button onclick="sendMsg()">Send</button>
-                            </div>
+                <!-- Members Tab -->
+                <div class="tab-panel" id="members-panel">
+                    <div class="members-list" id="nav-members"></div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div class="tab-panel" id="settings-panel">
+                    <div class="settings-form">
+                        <div class="setting-item">
+                            <label for="inputName">Your Name</label>
+                            <input type="text" class="form-control" id="inputName" placeholder="Name" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label for="inputRoom">Room Code</label>
+                            <input type="text" class="form-control" id="inputRoom" placeholder="Room" readonly>
+                        </div>
+                        <div class="setting-item">
+                            <label for="inputPass">Password</label>
+                            <input type="text" class="form-control" id="inputPass" placeholder="Password" readonly>
                         </div>
                     </div>
-                    <div class="tab-pane fade" id="nav-settings" role="tabpanel" aria-labelledby="nav-settings-tab">
-                        <fieldset disabled>
-                            <div class="row g-2">
-                                <div class="col-auto">
-                                    <label for="inputName" class="form-label">Name</label>
-                                    <input type="text" class="form-control" id="inputName" placeholder="Name">
-                                </div>
-                            </div>
-                            <div class="row g-2">
-                                <div class="col-auto">
-                                    <label for="inputRoom" class="form-label">Room Code</label>
-                                    <input type="text" class="form-control" id="inputRoom" placeholder="Room">
-                                </div>
-                            </div>
-                            <div class="row g-2">
-                                <div class="col-auto">
-                                    <label for="inputPass" class="form-label">Password</label>
-                                    <input type="text" class="form-control" id="inputPass" placeholder="">
-                                </div>
-                        </fieldset>
-                    </div>
-                    <div class="tab-pane fade" id="nav-members" role="tabpanel" aria-labelledby="nav-members-tab">
-                            
-                    </div>
-
                 </div>
             </div>
-        </div>
-    </div>
+        </aside>
     </div>
 
 
@@ -131,6 +107,20 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
         crossorigin="anonymous"></script>
+    <script>
+        // Sidebar tab switching
+        document.querySelectorAll('.sidebar-tab').forEach(tab => {
+          tab.addEventListener('click', () => {
+            const tabName = tab.getAttribute('data-tab');
+            // Remove active from all tabs and panels
+            document.querySelectorAll('.sidebar-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            // Add active to clicked tab and corresponding panel
+            tab.classList.add('active');
+            document.getElementById(tabName + '-panel').classList.add('active');
+          });
+        });
+    </script>
 </body>
 
 
